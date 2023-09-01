@@ -1,3 +1,7 @@
+<p align="center">
+    <img src="public/icon-full.png" alt="Piano Icon Large"/>
+</p>
+
 <h1 align="center"><strong>Keyboard</strong></h1>
 
 <p align="center">
