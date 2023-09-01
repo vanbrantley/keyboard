@@ -15,9 +15,6 @@ const Key = (props: IKeyProps) => {
     const keyClassName = `key ${isFlat ? 'flat' : ''} ${isPressed ? 'pressed' : ''}`;
     const keyTextClassName = `key-text ${isFlat ? 'flat' : ''} ${inScale ? 'scale' : ''}`;
 
-    console.log("Class: " + keyClassName);
-    console.log("Text Class: " + keyTextClassName);
-
     return (
         <div className={keyClassName}>
             <div className={keyTextClassName}>{NOTE_TO_KEY[props.note]}</div>

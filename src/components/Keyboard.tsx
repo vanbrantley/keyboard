@@ -13,7 +13,7 @@ const Keyboard = (props: IKeyboardProps) => {
 
     const playNote = (note: string | undefined) => {
         if (note) {
-            const noteAudio = new Audio(document.getElementById(note)?.src || '');
+            const noteAudio = new Audio((document.getElementById(note) as HTMLAudioElement)?.src || '');
             noteAudio.play();
         }
     };
