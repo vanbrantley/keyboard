@@ -18,6 +18,11 @@ const Keyboard = (props: IKeyboardProps) => {
         }
     };
 
+    const playNoteOnClick = (note: string) => {
+        const noteAudio = new Audio(`./../../notes2/${note}.mp3`);
+        noteAudio.play();
+    };
+
     const handleKeyDown = (event: KeyboardEvent) => {
         if (event.repeat) {
             return;
@@ -51,7 +56,7 @@ const Keyboard = (props: IKeyboardProps) => {
 
     const keys = NOTES2.map((note, index) => {
         return (
-            <Key note={note} scaleNotes={props.scaleNotes} pressedKeys={pressedKeys} />
+            <Key note={note} scaleNotes={props.scaleNotes} pressedKeys={pressedKeys} playNoteOnClick={playNoteOnClick} />
         );
     });
 
@@ -78,7 +83,3 @@ const Keyboard = (props: IKeyboardProps) => {
 };
 
 export default Keyboard;
-
-function handleKeyUp(this: Window, ev: KeyboardEvent) {
-    throw new Error("Function not implemented.");
-}
