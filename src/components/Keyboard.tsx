@@ -62,7 +62,7 @@ const Keyboard = (props: IKeyboardProps) => {
 
     const audioFiles = NOTES2.map((note, index) => {
         return (
-            <audio id={note} src={`./../../notes2/${note}.mp3`} />
+            <audio id={note} src={`./../../notes2/${note}.mp3`} preload="auto" />
         );
     });
 
