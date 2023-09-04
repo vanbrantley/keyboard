@@ -18,11 +18,6 @@ const Keyboard = (props: IKeyboardProps) => {
         }
     };
 
-    const playNoteOnClick = (note: string) => {
-        const noteAudio = new Audio(`./../../notes2/${note}.mp3`);
-        noteAudio.play();
-    };
-
     const handleKeyDown = (event: KeyboardEvent) => {
         if (event.repeat) {
             return;
@@ -56,7 +51,7 @@ const Keyboard = (props: IKeyboardProps) => {
 
     const keys = NOTES2.map((note, index) => {
         return (
-            <Key key={note} note={note} scaleNotes={props.scaleNotes} pressedKeys={pressedKeys} playNoteOnClick={playNoteOnClick} />
+            <Key key={note} note={note} scaleNotes={props.scaleNotes} pressedKeys={pressedKeys} />
         );
     });
 
