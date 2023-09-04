@@ -56,13 +56,13 @@ const Keyboard = (props: IKeyboardProps) => {
 
     const keys = NOTES2.map((note, index) => {
         return (
-            <Key note={note} scaleNotes={props.scaleNotes} pressedKeys={pressedKeys} playNoteOnClick={playNoteOnClick} />
+            <Key key={note} note={note} scaleNotes={props.scaleNotes} pressedKeys={pressedKeys} playNoteOnClick={playNoteOnClick} />
         );
     });
 
     const audioFiles = NOTES2.map((note, index) => {
         return (
-            <audio id={note} src={`./../../notes2/${note}.mp3`} preload="auto" />
+            <audio key={note} id={note} src={`./../../notes2/${note}.mp3`} preload="auto" />
         );
     });
 

@@ -10,12 +10,15 @@ type StringArrayDictionary = {
 const DesktopLayout = () => {
 
     const [isMajor, setIsMajor] = useState<boolean>(true);
+    const [selectedIndex, setSelectedIndex] = useState<number>(-1);
     const [scaleNotes, setScaleNotes] = useState<string[]>([]);
     const [chordNotes, setChordNotes] = useState<StringArrayDictionary>({});
 
+    // const selectedIndex = 4;
+
     const getScale = (index: number) => {
 
-        if (scaleNotes[0] === NOTES2[index]) {
+        if (selectedIndex === -1) {
             setScaleNotes([]);
             return;
         }
@@ -28,6 +31,21 @@ const DesktopLayout = () => {
         var scale = indices.map(i => NOTES2[i]);
         setScaleNotes(scale);
 
+    };
+
+    const handleButtonClick = (index: number) => {
+
+        if (index === selectedIndex) setSelectedIndex(-1);
+        else setSelectedIndex(index);
+    };
+
+    const handleRadioChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+        const newValue = event.target.value === 'major';
+        console.log("new value: ", newValue);
+        console.log("isMajor: ", isMajor);
+        if (newValue !== isMajor) {
+            setIsMajor(newValue);
+        }
     };
 
     const getChords = () => {
@@ -52,6 +70,26 @@ const DesktopLayout = () => {
 
     };
 
+    const playChord = (notes: string[]) => {
+
+        if (notes) {
+            const audioElements = notes.map((note: string) => {
+                const audio = new Audio(`./../../notes2/${note}.mp3`);
+                audio.load();
+                return audio;
+            });
+
+            // Play all audio elements concurrently
+            audioElements.forEach((audio) => audio.play());
+        }
+    }
+
+    // get scale notes once the index or scale type changes
+    useEffect(() => {
+        getScale(selectedIndex)
+    }, [selectedIndex, isMajor]);
+
+    // chords change when scale notes change - could potentially just get these together...
     useEffect(() => {
         getChords();
     }, [scaleNotes]);
@@ -62,7 +100,7 @@ const DesktopLayout = () => {
         <div className="h-screen flex">
             <div className="w-full">
 
-                <div className="h-1/2 flex flex-col items-center bg-blue-500">
+                <div className="h-3/5 flex flex-col items-center bg-blue-500">
                     <br></br>
                     <Keyboard scaleNotes={scaleNotes} />
 
@@ -72,26 +110,53 @@ const DesktopLayout = () => {
                         {NOTES.map((note, index) => (
                             <button
                                 key={note}
-                                onClick={() => getScale(index)}
-                                className="bg-white hover:bg-gray-100 text-gray-800 font-semibold py-2 px-4 border border-gray-400 rounded shadow"
+                                onClick={() => handleButtonClick(index)}
+                                className={`${selectedIndex === index ? 'bg-gray-500 text-white' : 'bg-white hover:bg-gray-100 text-gray-800'
+                                    } font-semibold py-2 px-4 border border-gray-400 rounded shadow`}
                             >
                                 {note}
                             </button>
                         ))}
                     </div>
 
+                    <br></br>
+
+                    <div>
+                        <label>
+                            <input
+                                type="radio"
+                                value="major"
+                                checked={isMajor}
+                                onChange={handleRadioChange}
+                            />
+                            Major
+                        </label>
+                        <label>
+                            <input
+                                type="radio"
+                                value="minor"
+                                checked={!isMajor}
+                                onChange={handleRadioChange}
+                            />
+                            Minor
+                        </label>
+                    </div>
+
                 </div>
 
-                <div className="h-1/2 flex justify-center bg-green-500">
+                <div className="h-2/5 flex justify-center bg-green-500">
                     {(scaleNotes.length === 0) ?
                         null
                         :
                         <div className="flex space-x-16">
-                            {Object.entries(chordNotes).map(([key, value]) => {
+                            {Object.entries(chordNotes).map(([chordNumber, notes]) => {
                                 return (
-                                    <p key={key}>
-                                        {key}: {NOTE_TO_KEY[value[0]]} {NOTE_TO_KEY[value[1]]} {NOTE_TO_KEY[value[2]]}
-                                    </p>
+                                    <button
+                                        key={chordNumber}
+                                        onClick={() => playChord(notes)}
+                                        className="bg-white hover:bg-gray-100 text-gray-800 font-semibold py-2 px-4 border border-gray-400 rounded shadow">
+                                        {chordNumber}: {NOTE_TO_KEY[notes[0]]} {NOTE_TO_KEY[notes[1]]} {NOTE_TO_KEY[notes[2]]}
+                                    </button>
                                 );
                             })}
                         </div>
