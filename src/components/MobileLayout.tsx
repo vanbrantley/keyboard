@@ -1,9 +1,7 @@
 import { useEffect, useContext } from "react";
 import { AppStoreContext } from '../context/AppStoreContext';
 import { observer } from 'mobx-react-lite';
-import "./../styles/styles.module.css";
-import Keyboard from "./../components/Keyboard";
-import { NOTES, NOTES2, NOTE_TO_KEY } from './../global/constants';
+import { NOTES } from './../global/constants';
 import MiniKeyboard from "./MiniKeyboard";
 
 const MobileLayout = observer(() => {

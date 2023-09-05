@@ -109,6 +109,15 @@ class AppStore {
 
             // Play all audio elements concurrently
             audioElements.forEach((audio) => audio.play());
+
+            // add keys to pressedKeys array for a second
+            this.setPressedKeys([...this.pressedKeys, ...notes]);
+
+            setTimeout(() => {
+                const notesRemoved = this.pressedKeys.filter((key) => !notes.includes(key));
+                this.setPressedKeys(notesRemoved);
+            }, 1000);
+
         }
 
     });

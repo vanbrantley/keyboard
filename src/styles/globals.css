@@ -71,7 +71,19 @@
   z-index: 2;
 }
 
-.minikey.chord,
-.minikey.flat.chord {
+.minikey.pressed,
+.minikey.flat.pressed {
+  background-color: #00d8ff;
+}
+
+.minikey.scale,
+.minikey.flat.scale {
   background-color: #54d16b;
+}
+
+.minikey.scale.pressed,
+.minikey.scale.scale.pressed,
+.minikey.flat.scale.pressed,
+.minikey.flat.pressed.scale {
+  background-color: #00d8ff;
 }

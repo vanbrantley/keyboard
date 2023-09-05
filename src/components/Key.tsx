@@ -11,7 +11,7 @@ const Key = (props: IKeyProps) => {
     const { note, scaleNotes, pressedKeys } = props;
 
     const isFlat = note.length > 2;
-    const isPressed = pressedKeys.includes(NOTE_TO_KEY[note]);
+    const isPressed = pressedKeys.includes(note);
     const inScale = scaleNotes.includes(note);
 
     const keyClassName = `key ${isFlat ? 'flat' : ''} ${isPressed ? 'pressed' : ''}`;

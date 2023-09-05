@@ -1,15 +1,19 @@
-import { useState, useEffect } from "react";
-import "../styles/styles.module.css";
+import { useEffect, useContext } from "react";
 import Key from "./Key";
-import { KEY_TO_NOTE, NOTES, NOTES2, VALID_KEYS } from './../global/constants';
+import { KEY_TO_NOTE, NOTES2, VALID_KEYS } from './../global/constants';
+import { AppStoreContext } from '../context/AppStoreContext';
+import { observer } from 'mobx-react-lite';
 
 interface IKeyboardProps {
     scaleNotes: string[],
 }
 
-const Keyboard = (props: IKeyboardProps) => {
+const Keyboard = observer((props: IKeyboardProps) => {
 
-    const [pressedKeys, setPressedKeys] = useState<string[]>([]);
+    const store = useContext(AppStoreContext);
+    const { pressedKeys, setPressedKeys } = store;
+
+    // const [pressedKeys, setPressedKeys] = useState<string[]>([]);
 
     const playNote = (note: string | undefined) => {
         if (note) {
@@ -23,14 +27,17 @@ const Keyboard = (props: IKeyboardProps) => {
             return;
         }
         const key = event.key;
-        if (!pressedKeys.includes(key) && VALID_KEYS.includes(key)) {
-            setPressedKeys([...pressedKeys, key]);
+        const note = KEY_TO_NOTE[key];
+        if (!pressedKeys.includes(note) && VALID_KEYS.includes(key)) {
+            setPressedKeys([...pressedKeys, note]);
         }
-        playNote(KEY_TO_NOTE[key]);
+        playNote(note);
     };
 
     const handleKeyUp = (event: KeyboardEvent) => {
-        const index = pressedKeys.indexOf(event.key);
+        const key = event.key;
+        const note = KEY_TO_NOTE[key];
+        const index = pressedKeys.indexOf(note);
         if (index > -1) {
             const updatedPressedKeys = [...pressedKeys.slice(0, index), ...pressedKeys.slice(index + 1)];
             setPressedKeys(updatedPressedKeys);
@@ -75,6 +82,6 @@ const Keyboard = (props: IKeyboardProps) => {
         </>
     );
 
-};
+});
 
 export default Keyboard;

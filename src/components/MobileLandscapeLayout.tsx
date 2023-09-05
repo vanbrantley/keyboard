@@ -1,5 +1,4 @@
 import { useContext, useEffect } from "react";
-import "./../styles/styles.module.css";
 import MiniKeyboard from "./MiniKeyboard";
 import { NOTES } from './../global/constants';
 import { AppStoreContext } from '../context/AppStoreContext';
