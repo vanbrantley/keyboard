@@ -62,7 +62,7 @@ const Keyboard = observer((props: IKeyboardProps) => {
         );
     });
 
-    const audioFiles = NOTES2.map((note, index) => {
+    const noteFiles = NOTES2.map((note, index) => {
         return (
             <audio key={note} id={note} src={`./../../notes2/${note}.mp3`} preload="auto" />
         );
@@ -76,7 +76,7 @@ const Keyboard = observer((props: IKeyboardProps) => {
                 </div>
 
                 <div>
-                    {audioFiles}
+                    {noteFiles}
                 </div>
             </div>
         </>

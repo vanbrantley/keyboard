@@ -7,7 +7,7 @@ import { observer } from 'mobx-react-lite';
 const DesktopLayout = observer(() => {
 
     const store = useContext(AppStoreContext);
-    const { isMajor, selectedIndex, scaleNotes, chordNotes, setScaleNotes, setChordNotes,
+    const { isMajor, selectedIndex, scaleNotes, chordNotes,
         getScale, getChords, playChord, handleScaleButtonClick, handleRadioChange } = store;
 
     // keep these useEffects until you implement mobx store autorun
@@ -20,6 +20,19 @@ const DesktopLayout = observer(() => {
     useEffect(() => {
         getChords();
     }, [scaleNotes]);
+
+    const scale = NOTES[selectedIndex];
+
+    const chordNames = isMajor ? [`${scale}I`, `${scale}ii`, `${scale}iii`, `${scale}IV`, `${scale}V`, `${scale}vi`, `${scale}vii°`]
+        : [`${scale}mi`, `${scale}mii°`, `${scale}mIII`, `${scale}miv`, `${scale}mv`, `${scale}mVI`, `${scale}mVII`];
+
+    console.log(chordNames);
+
+    const chordFiles = chordNames.map((chord, index) => {
+        return (
+            <audio key={chord} id={chord} src={`./../../chords/${chord}.mp3`} preload="auto" />
+        );
+    });
 
     return (
 
@@ -77,10 +90,12 @@ const DesktopLayout = observer(() => {
                         :
                         <div className="flex space-x-16">
                             {Object.entries(chordNotes).map(([chordNumber, notes]) => {
+                                const chordName = isMajor ? `${scale}${chordNumber}` : `${scale}m${chordNumber}`;
+                                console.log(chordName);
                                 return (
                                     <button
                                         key={chordNumber}
-                                        onClick={() => playChord(notes)}
+                                        onClick={() => playChord(chordName, notes)}
                                         className="bg-white hover:bg-gray-100 text-gray-800 font-semibold py-2 px-4 border border-gray-400 rounded shadow">
                                         {chordNumber}: {NOTE_TO_KEY[notes[0]]} {NOTE_TO_KEY[notes[1]]} {NOTE_TO_KEY[notes[2]]}
                                     </button>
@@ -90,6 +105,10 @@ const DesktopLayout = observer(() => {
                     }
 
                 </div>
+            </div>
+
+            <div>
+                {chordFiles}
             </div>
 
         </div>

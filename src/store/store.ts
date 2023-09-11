@@ -98,17 +98,11 @@ class AppStore {
 
     });
 
-    playChord = action((notes: string[]) => {
+    playChord = action((chordName: string, notes: string[]) => {
 
         if (notes) {
-            const audioElements = notes.map((note: string) => {
-                const audio = new Audio(`./../../notes2/${note}.mp3`);
-                audio.load();
-                return audio;
-            });
-
-            // Play all audio elements concurrently
-            audioElements.forEach((audio) => audio.play());
+            const chordAudio = new Audio((document.getElementById(chordName) as HTMLAudioElement)?.src || '');
+            chordAudio.play();
 
             // add keys to pressedKeys array for a second
             this.setPressedKeys([...this.pressedKeys, ...notes]);
@@ -121,6 +115,30 @@ class AppStore {
         }
 
     });
+
+    // playChord = action((notes: string[]) => {
+
+    //     if (notes) {
+    //         const audioElements = notes.map((note: string) => {
+    //             const audio = new Audio(`./../../notes2/${note}.mp3`);
+    //             audio.load();
+    //             return audio;
+    //         });
+
+    //         // Play all audio elements concurrently
+    //         audioElements.forEach((audio) => audio.play());
+
+    //         // add keys to pressedKeys array for a second
+    //         this.setPressedKeys([...this.pressedKeys, ...notes]);
+
+    //         setTimeout(() => {
+    //             const notesRemoved = this.pressedKeys.filter((key) => !notes.includes(key));
+    //             this.setPressedKeys(notesRemoved);
+    //         }, 1000);
+
+    //     }
+
+    // });
 
     handleScaleButtonClick = action((index: number) => {
 
