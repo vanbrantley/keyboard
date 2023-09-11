@@ -21,6 +21,16 @@ const MobileLayout = observer(() => {
         getChords();
     }, [scaleNotes]);
 
+    const scale = NOTES[selectedIndex];
+
+    const chordNames = isMajor ? [`${scale}I`, `${scale}ii`, `${scale}iii`, `${scale}IV`, `${scale}V`, `${scale}vi`, `${scale}vii°`]
+        : [`${scale}mi`, `${scale}mii°`, `${scale}mIII`, `${scale}miv`, `${scale}mv`, `${scale}mVI`, `${scale}mVII`];
+
+    const chordFiles = chordNames.map((chord, index) => {
+        return (
+            <audio key={chord} id={chord} src={`./../../chords/${chord}.mp3`} preload="auto" />
+        );
+    });
 
     return (
 
@@ -54,10 +64,11 @@ const MobileLayout = observer(() => {
                         :
                         <div className="grid grid-cols-2 gap-4">
                             {Object.entries(chordNotes).map(([chordNumber, notes]) => {
+                                const chordName = isMajor ? `${scale}${chordNumber}` : `${scale}m${chordNumber}`;
                                 return (
                                     <button
                                         key={chordNumber}
-                                        onClick={() => playChord(chordNumber, notes)}
+                                        onClick={() => playChord(chordName, notes)}
                                         className="bg-white hover:bg-gray-100 text-gray-800 font-semibold py-2 px-4 border border-gray-400 rounded shadow">
                                         {chordNumber}
                                     </button>
@@ -68,6 +79,11 @@ const MobileLayout = observer(() => {
                 </div>
 
             </div>
+
+            <div>
+                {chordFiles}
+            </div>
+
         </div>
 
 
