@@ -91,7 +91,6 @@ const DesktopLayout = observer(() => {
                         <div className="flex space-x-16">
                             {Object.entries(chordNotes).map(([chordNumber, notes]) => {
                                 const chordName = isMajor ? `${scale}${chordNumber}` : `${scale}m${chordNumber}`;
-                                console.log(chordName);
                                 return (
                                     <button
                                         key={chordNumber}
