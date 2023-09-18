@@ -8,7 +8,7 @@ const MobileLayout = observer(() => {
 
     const store = useContext(AppStoreContext);
     const { isMajor, selectedIndex, scaleNotes, chordNotes,
-        getScale, getChords, handleScaleButtonClick, playChord } = store;
+        getScale, getChords, handleScaleButtonClick, playChord, handleRadioChange } = store;
 
     // keep these useEffects until you implement mobx store autorun
     // get scale notes once the index or scale type changes
@@ -37,11 +37,11 @@ const MobileLayout = observer(() => {
         <div className="h-screen flex">
             <div className="w-full">
 
-                <div className="h-1/5 flex flex-col items-center bg-blue-500">
+                <div className="h-1/5 flex flex-col items-center">
                     <br></br>
                     <MiniKeyboard scaleNotes={scaleNotes.slice(0, 8)} />
                 </div>
-                <div className="h-1/5 flex flex-col items-center bg-yellow-500">
+                <div className="h-1/5 flex flex-col items-center">
                     <br></br>
                     <div className="grid grid-cols-6 gap-4">
                         {NOTES.map((note, index) => (
@@ -56,20 +56,42 @@ const MobileLayout = observer(() => {
                         ))}
                     </div>
 
+                    <div className="flex space-x-4">
+                        <label className="text-white">
+                            <input
+                                type="radio"
+                                value="major"
+                                checked={isMajor}
+                                onChange={handleRadioChange}
+                            />
+                            Major
+                        </label>
+                        <label className="text-white">
+                            <input
+                                type="radio"
+                                value="minor"
+                                checked={!isMajor}
+                                onChange={handleRadioChange}
+                            />
+                            Minor
+                        </label>
+                    </div>
+
                 </div>
-                <div className="h-3/5 flex flex-col items-center bg-orange-500">
+                <div className="h-3/5 flex flex-col items-center">
                     <br></br>
                     {(scaleNotes.length === 0) ?
                         null
                         :
-                        <div className="grid grid-cols-2 gap-4">
+                        <div className="grid grid-cols-2" style={{ width: "100%", height: "100%" }}>
                             {Object.entries(chordNotes).map(([chordNumber, notes]) => {
                                 const chordName = isMajor ? `${scale}${chordNumber}` : `${scale}m${chordNumber}`;
                                 return (
                                     <button
                                         key={chordNumber}
                                         onClick={() => playChord(chordName, notes)}
-                                        className="bg-white hover:bg-gray-100 text-gray-800 font-semibold py-2 px-4 border border-gray-400 rounded shadow">
+                                        className="h-full bg-white hover:bg-gray-100 text-gray-800 font-semibold py-2 px-4 border border-gray-400 rounded shadow"
+                                    >
                                         {chordNumber}
                                     </button>
                                 );
@@ -85,7 +107,6 @@ const MobileLayout = observer(() => {
             </div>
 
         </div>
-
 
     );
 

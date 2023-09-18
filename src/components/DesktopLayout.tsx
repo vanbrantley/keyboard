@@ -1,6 +1,6 @@
 import { useEffect, useContext } from "react";
 import Keyboard from "./../components/Keyboard";
-import { NOTES, NOTES2, NOTE_TO_KEY } from './../global/constants';
+import { NOTES, NOTE_TO_KEY } from './../global/constants';
 import { AppStoreContext } from '../context/AppStoreContext';
 import { observer } from 'mobx-react-lite';
 
@@ -16,31 +16,35 @@ const DesktopLayout = observer(() => {
         getScale(selectedIndex)
     }, [selectedIndex, isMajor]);
 
-    // chords change when scale notes change - could potentially just get these together...
     useEffect(() => {
         getChords();
     }, [scaleNotes]);
 
-    const scale = NOTES[selectedIndex];
+    let chordNames = [];
+    let chordFiles: JSX.Element[] = [];
+    let scale = "";
 
-    const chordNames = isMajor ? [`${scale}I`, `${scale}ii`, `${scale}iii`, `${scale}IV`, `${scale}V`, `${scale}vi`, `${scale}vii°`]
-        : [`${scale}mi`, `${scale}mii°`, `${scale}mIII`, `${scale}miv`, `${scale}mv`, `${scale}mVI`, `${scale}mVII`];
+    if (selectedIndex !== -1) {
 
-    console.log(chordNames);
+        scale = NOTES[selectedIndex];
 
-    const chordFiles = chordNames.map((chord, index) => {
-        return (
-            <audio key={chord} id={chord} src={`./../../chords/${chord}.mp3`} preload="auto" />
-        );
-    });
+        chordNames = isMajor ? [`${scale}I`, `${scale}ii`, `${scale}iii`, `${scale}IV`, `${scale}V`, `${scale}vi`, `${scale}vii°`]
+            : [`${scale}mi`, `${scale}mii°`, `${scale}mIII`, `${scale}miv`, `${scale}mv`, `${scale}mVI`, `${scale}mVII`];
+
+        chordFiles = chordNames.map((chord, index) => {
+            return (
+                <audio key={chord} id={chord} src={`./../../chords/${chord}.mp3`} preload="auto" />
+            );
+        });
+
+    }
 
     return (
-
 
         <div className="h-screen flex">
             <div className="w-full">
 
-                <div className="h-3/5 flex flex-col items-center bg-blue-500">
+                <div className="h-3/5 flex flex-col items-center">
                     <br></br>
                     <Keyboard scaleNotes={scaleNotes.slice(0, 8)} />
 
@@ -61,8 +65,8 @@ const DesktopLayout = observer(() => {
 
                     <br></br>
 
-                    <div>
-                        <label>
+                    <div className="flex space-x-4">
+                        <label className="text-white">
                             <input
                                 type="radio"
                                 value="major"
@@ -71,7 +75,7 @@ const DesktopLayout = observer(() => {
                             />
                             Major
                         </label>
-                        <label>
+                        <label className="text-white">
                             <input
                                 type="radio"
                                 value="minor"
@@ -84,18 +88,18 @@ const DesktopLayout = observer(() => {
 
                 </div>
 
-                <div className="h-2/5 flex justify-center bg-green-500">
+                <div className="h-2/5 flex justify-center">
                     {(scaleNotes.length === 0) ?
                         null
                         :
-                        <div className="flex space-x-16">
+                        <div className="flex flex-grow">
                             {Object.entries(chordNotes).map(([chordNumber, notes]) => {
                                 const chordName = isMajor ? `${scale}${chordNumber}` : `${scale}m${chordNumber}`;
                                 return (
                                     <button
                                         key={chordNumber}
                                         onClick={() => playChord(chordName, notes)}
-                                        className="bg-white hover:bg-gray-100 text-gray-800 font-semibold py-2 px-4 border border-gray-400 rounded shadow">
+                                        className="flex-grow bg-white hover:bg-gray-100 text-gray-800 font-semibold py-2 px-4 border border-gray-400 rounded shadow">
                                         {chordNumber}: {NOTE_TO_KEY[notes[0]]} {NOTE_TO_KEY[notes[1]]} {NOTE_TO_KEY[notes[2]]}
                                     </button>
                                 );

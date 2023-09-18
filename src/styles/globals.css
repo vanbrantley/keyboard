@@ -27,7 +27,7 @@
 
 .key.pressed,
 .key.flat.pressed {
-  background-color: #00d8ff;
+  background-color: #0285d1;
 }
 
 .key-text {
@@ -50,7 +50,7 @@
 
 .key-text.scale,
 .key-text.flat.scale {
-  color: #54d16b;
+  color: #00c479;
 }
 
 /* Mini keyboard class stylings */
@@ -73,17 +73,17 @@
 
 .minikey.pressed,
 .minikey.flat.pressed {
-  background-color: #00d8ff;
+  background-color: #0285d1;
 }
 
 .minikey.scale,
 .minikey.flat.scale {
-  background-color: #54d16b;
+  background-color: #00c479;
 }
 
 .minikey.scale.pressed,
 .minikey.scale.scale.pressed,
 .minikey.flat.scale.pressed,
 .minikey.flat.pressed.scale {
-  background-color: #00d8ff;
+  background-color: #0285d1;
 }
