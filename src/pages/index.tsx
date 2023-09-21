@@ -1,12 +1,10 @@
 import { useContext, useState, useEffect } from 'react';
 import Keyboard from "./../components/Keyboard";
 import MiniKeyboard from "./../components/MiniKeyboard";
+import ProgressionLab from './../components/ProgressionLab';
 import { NOTES, NOTE_TO_KEY } from './../global/constants';
 import { AppStoreContext } from '../context/AppStoreContext';
 import { observer } from 'mobx-react-lite';
-// import DesktopLayout from '../components/DesktopLayout';
-// import MobileLayout from '../components/MobileLayout';
-// import MobileLandscapeLayout from '../components/MobileLandscapeLayout';
 
 enum Layout {
   Desktop,
@@ -18,7 +16,8 @@ const Home = observer(() => {
 
   const store = useContext(AppStoreContext);
   const { isMajor, selectedIndex, scaleNotes, chordNotes,
-    getScale, getChords, playChord, handleScaleButtonClick, handleRadioChange } = store;
+    scale, chordFilesInfo, getScale, getChords, playChord, handleScaleButtonClick, handleRadioChange,
+    showLab, setShowLab } = store;
 
   const [currentLayout, setCurrentLayout] = useState<Layout>(Layout.Desktop);
 
@@ -51,23 +50,14 @@ const Home = observer(() => {
     getChords();
   }, [scaleNotes]);
 
-  let chordNames = [];
   let chordFiles: JSX.Element[] = [];
-  let scale = "";
 
   if (selectedIndex !== -1) {
-
-    scale = NOTES[selectedIndex];
-
-    chordNames = isMajor ? [`${scale}I`, `${scale}ii`, `${scale}iii`, `${scale}IV`, `${scale}V`, `${scale}vi`, `${scale}vii°`]
-      : [`${scale}mi`, `${scale}mii°`, `${scale}mIII`, `${scale}miv`, `${scale}mv`, `${scale}mVI`, `${scale}mVII`];
-
-    chordFiles = chordNames.map((chord, index) => {
+    chordFiles = chordFilesInfo.map((chord, index) => {
       return (
-        <audio key={chord} id={chord} src={`./../../chords/${chord}.mp3`} preload="auto" />
+        <audio key={chord.key} id={chord.id} src={chord.src} preload={chord.preload} />
       );
     });
-
   }
 
   return (
@@ -78,50 +68,59 @@ const Home = observer(() => {
           <div className="w-full">
 
             <div className="h-3/5 flex flex-col items-center">
-              <br></br>
-              <Keyboard scaleNotes={scaleNotes.slice(0, 8)} />
+              {showLab ? (
+                <ProgressionLab />
+              ) : (
+                <>
+                  <br></br>
+                  <Keyboard scaleNotes={scaleNotes.slice(0, 8)} />
+                  <br></br>
+                  <div className="flex space-x-4">
+                    {NOTES.map((note, index) => (
+                      <button
+                        key={note}
+                        onClick={() => handleScaleButtonClick(index)}
+                        className={`${selectedIndex === index ? 'bg-gray-500 text-white' : 'bg-white hover:bg-gray-100 text-gray-800'
+                          } font-semibold py-2 px-4 border border-gray-400 rounded shadow`}
+                      >
+                        {note}
+                      </button>
+                    ))}
+                  </div>
+
+                  <br></br>
+
+                  <div className="flex space-x-4">
+                    <label className="text-white">
+                      <input
+                        type="radio"
+                        value="major"
+                        checked={isMajor}
+                        onChange={handleRadioChange}
+                      />
+                      Major
+                    </label>
+                    <label className="text-white">
+                      <input
+                        type="radio"
+                        value="minor"
+                        checked={!isMajor}
+                        onChange={handleRadioChange}
+                      />
+                      Minor
+                    </label>
+                  </div>
+                </>
+              )}
 
               <br></br>
-
-              <div className="flex space-x-4">
-                {NOTES.map((note, index) => (
-                  <button
-                    key={note}
-                    onClick={() => handleScaleButtonClick(index)}
-                    className={`${selectedIndex === index ? 'bg-gray-500 text-white' : 'bg-white hover:bg-gray-100 text-gray-800'
-                      } font-semibold py-2 px-4 border border-gray-400 rounded shadow`}
-                  >
-                    {note}
-                  </button>
-                ))}
-              </div>
-
-              <br></br>
-
-              <div className="flex space-x-4">
-                <label className="text-white">
-                  <input
-                    type="radio"
-                    value="major"
-                    checked={isMajor}
-                    onChange={handleRadioChange}
-                  />
-                  Major
-                </label>
-                <label className="text-white">
-                  <input
-                    type="radio"
-                    value="minor"
-                    checked={!isMajor}
-                    onChange={handleRadioChange}
-                  />
-                  Minor
-                </label>
-              </div>
 
             </div>
 
             <div className="h-2/5 flex justify-center">
+
+              {(selectedIndex !== -1) && <button onClick={() => setShowLab(!showLab)} style={{ color: "white" }}>Lab toggle</button>}
+
               {(scaleNotes.length === 0) ?
                 null
                 :

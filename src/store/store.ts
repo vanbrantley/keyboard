@@ -1,5 +1,5 @@
-import { observable, action, makeObservable } from 'mobx';
-import { NOTES2 } from './../global/constants';
+import { observable, action, computed, makeObservable } from 'mobx';
+import { NOTES, NOTES2 } from './../global/constants';
 
 type StringArrayDictionary = {
     [key: string]: string[];
@@ -13,6 +13,8 @@ class AppStore {
     scaleNotes: string[] = [];
     chordNotes: StringArrayDictionary = {};
     pressedKeys: string[] = [];
+    showLab = false;
+    progressionChordIndices: number[] = [];
 
     constructor() {
 
@@ -22,11 +24,39 @@ class AppStore {
             selectedIndex: observable,
             scaleNotes: observable,
             chordNotes: observable,
-            pressedKeys: observable
+            pressedKeys: observable,
+            showLab: observable,
+            progressionChordIndices: observable,
+            scale: computed,
+            chordNames: computed,
+            chordFilesInfo: computed,
 
         });
 
     }
+
+
+    // computed functions
+    get scale() {
+        return this.selectedIndex !== -1 ? NOTES[this.selectedIndex] : '';
+    };
+
+    get chordNames() {
+        return this.selectedIndex !== -1
+            ? (this.isMajor
+                ? [`${this.scale}I`, `${this.scale}ii`, `${this.scale}iii`, `${this.scale}IV`, `${this.scale}V`, `${this.scale}vi`, `${this.scale}vii°`]
+                : [`${this.scale}mi`, `${this.scale}mii°`, `${this.scale}mIII`, `${this.scale}miv`, `${this.scale}mv`, `${this.scale}mVI`, `${this.scale}mVII`])
+            : [];
+    };
+
+    get chordFilesInfo() {
+        return this.chordNames.map((chord) => ({
+            key: chord,
+            id: chord,
+            src: `./../../chords/${chord}.mp3`,
+            preload: 'auto',
+        }));
+    };
 
     // setter functions
     setIsMajor = action((newValue: boolean) => {
@@ -47,6 +77,26 @@ class AppStore {
 
     setPressedKeys = action((newValue: string[]) => {
         this.pressedKeys = newValue;
+    });
+
+    setShowLab = action((newValue: boolean) => {
+        this.showLab = newValue;
+    });
+
+    setProgressionChordIndices = action((newValue: number[]) => {
+        this.progressionChordIndices = newValue;
+    });
+
+    addProgressionChordIndex = action((newValue: number) => {
+        if (this.progressionChordIndices.length < 8) {
+            this.progressionChordIndices.push(newValue);
+        } else {
+            console.warn("Array limit reached. Cannot add more elements.");
+        }
+    });
+
+    removeProgressionChordIndex = action((index: number) => {
+        this.progressionChordIndices.splice(index, 1);
     });
 
 
@@ -115,30 +165,6 @@ class AppStore {
         }
 
     });
-
-    // playChord = action((notes: string[]) => {
-
-    //     if (notes) {
-    //         const audioElements = notes.map((note: string) => {
-    //             const audio = new Audio(`./../../notes2/${note}.mp3`);
-    //             audio.load();
-    //             return audio;
-    //         });
-
-    //         // Play all audio elements concurrently
-    //         audioElements.forEach((audio) => audio.play());
-
-    //         // add keys to pressedKeys array for a second
-    //         this.setPressedKeys([...this.pressedKeys, ...notes]);
-
-    //         setTimeout(() => {
-    //             const notesRemoved = this.pressedKeys.filter((key) => !notes.includes(key));
-    //             this.setPressedKeys(notesRemoved);
-    //         }, 1000);
-
-    //     }
-
-    // });
 
     handleScaleButtonClick = action((index: number) => {
 

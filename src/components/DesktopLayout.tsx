@@ -87,7 +87,6 @@ const DesktopLayout = observer(() => {
                     </div>
 
                 </div>
-
                 <div className="h-2/5 flex justify-center">
                     {(scaleNotes.length === 0) ?
                         null
