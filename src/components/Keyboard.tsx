@@ -11,16 +11,7 @@ interface IKeyboardProps {
 const Keyboard = observer((props: IKeyboardProps) => {
 
     const store = useContext(AppStoreContext);
-    const { pressedKeys, setPressedKeys } = store;
-
-    // const [pressedKeys, setPressedKeys] = useState<string[]>([]);
-
-    const playNote = (note: string | undefined) => {
-        if (note) {
-            const noteAudio = new Audio((document.getElementById(note) as HTMLAudioElement)?.src || '');
-            noteAudio.play();
-        }
-    };
+    const { pressedKeys, setPressedKeys, playNote } = store;
 
     const handleKeyDown = (event: KeyboardEvent) => {
         if (event.repeat) {
@@ -56,13 +47,13 @@ const Keyboard = observer((props: IKeyboardProps) => {
         };
     }, [pressedKeys]);
 
-    const keys = NOTES2.map((note, index) => {
+    const keys = NOTES2.map((note) => {
         return (
             <Key key={note} note={note} scaleNotes={props.scaleNotes} pressedKeys={pressedKeys} />
         );
     });
 
-    const noteFiles = NOTES2.map((note, index) => {
+    const noteFiles = NOTES2.map((note) => {
         return (
             <audio key={note} id={note} src={`./../../notes2/${note}.mp3`} preload="auto" />
         );

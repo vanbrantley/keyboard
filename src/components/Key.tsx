@@ -1,3 +1,6 @@
+import { useContext } from 'react';
+import { AppStoreContext } from '../context/AppStoreContext';
+import { observer } from 'mobx-react-lite';
 import { NOTE_TO_KEY } from "../global/constants";
 
 interface IKeyProps {
@@ -6,7 +9,10 @@ interface IKeyProps {
     pressedKeys: string[],
 }
 
-const Key = (props: IKeyProps) => {
+const Key = observer((props: IKeyProps) => {
+
+    const store = useContext(AppStoreContext);
+    const { playNote } = store;
 
     const { note, scaleNotes, pressedKeys } = props;
 
@@ -18,11 +24,11 @@ const Key = (props: IKeyProps) => {
     const keyTextClassName = `key-text ${isFlat ? 'flat' : ''} ${inScale ? 'scale' : ''}`;
 
     return (
-        <div className={keyClassName}>
+        <div className={keyClassName} onClick={() => playNote(note)}>
             <div className={keyTextClassName}>{NOTE_TO_KEY[note]}</div>
         </div>
     );
 
-};
+});
 
 export default Key;

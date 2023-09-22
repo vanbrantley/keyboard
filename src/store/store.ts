@@ -9,6 +9,7 @@ class AppStore {
 
     // state variables
     isMajor = true;
+    isChord = false;
     selectedIndex = -1;
     scaleNotes: string[] = [];
     chordNotes: StringArrayDictionary = {};
@@ -21,6 +22,7 @@ class AppStore {
         makeObservable(this, {
 
             isMajor: observable,
+            isChord: observable,
             selectedIndex: observable,
             scaleNotes: observable,
             chordNotes: observable,
@@ -61,6 +63,10 @@ class AppStore {
     // setter functions
     setIsMajor = action((newValue: boolean) => {
         this.isMajor = newValue;
+    });
+
+    setIsChord = action((newValue: boolean) => {
+        this.isChord = newValue;
     });
 
     setSelectedIndex = action((newValue: number) => {
@@ -160,11 +166,26 @@ class AppStore {
             setTimeout(() => {
                 const notesRemoved = this.pressedKeys.filter((key) => !notes.includes(key));
                 this.setPressedKeys(notesRemoved);
-            }, 1000);
+            }, 800);
 
         }
 
     });
+
+    playNote = (note: string | undefined) => {
+        if (note) {
+            const noteAudio = new Audio((document.getElementById(note) as HTMLAudioElement)?.src || '');
+            noteAudio.play();
+
+            // add key to pressedKeys array for a second
+            this.setPressedKeys([...this.pressedKeys, note]);
+
+            setTimeout(() => {
+                const noteRemoved = this.pressedKeys.filter((key) => key !== note);
+                this.setPressedKeys(noteRemoved);
+            }, 800);
+        }
+    };
 
     handleScaleButtonClick = action((index: number) => {
 
@@ -173,11 +194,20 @@ class AppStore {
 
     });
 
-    handleRadioChange = action((event: React.ChangeEvent<HTMLInputElement>) => {
+    handleMajorMinorRadioChange = action((event: React.ChangeEvent<HTMLInputElement>) => {
 
         const newValue = event.target.value === 'major';
         if (newValue !== this.isMajor) {
             this.setIsMajor(newValue);
+        }
+
+    });
+
+    handleNoteChordRadioChange = action((event: React.ChangeEvent<HTMLInputElement>) => {
+
+        const newValue = event.target.value === 'chords';
+        if (newValue !== this.isChord) {
+            this.setIsChord(newValue);
         }
 
     });

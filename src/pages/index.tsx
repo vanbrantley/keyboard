@@ -2,6 +2,7 @@ import { useContext, useState, useEffect } from 'react';
 import Keyboard from "./../components/Keyboard";
 import MiniKeyboard from "./../components/MiniKeyboard";
 import ProgressionLab from './../components/ProgressionLab';
+import NoteButtons from './../components/NoteButtons';
 import { NOTES, NOTE_TO_KEY } from './../global/constants';
 import { AppStoreContext } from '../context/AppStoreContext';
 import { observer } from 'mobx-react-lite';
@@ -15,8 +16,9 @@ enum Layout {
 const Home = observer(() => {
 
   const store = useContext(AppStoreContext);
-  const { isMajor, selectedIndex, scaleNotes, chordNotes,
-    scale, chordFilesInfo, getScale, getChords, playChord, handleScaleButtonClick, handleRadioChange,
+  const { isMajor, isChord, selectedIndex, scaleNotes, chordNotes,
+    scale, chordFilesInfo, getScale, getChords, playChord,
+    handleScaleButtonClick, handleMajorMinorRadioChange, handleNoteChordRadioChange,
     showLab, setShowLab } = store;
 
   const [currentLayout, setCurrentLayout] = useState<Layout>(Layout.Desktop);
@@ -58,7 +60,7 @@ const Home = observer(() => {
         <audio key={chord.key} id={chord.id} src={chord.src} preload={chord.preload} />
       );
     });
-  }
+  };
 
   return (
     <div>
@@ -88,7 +90,7 @@ const Home = observer(() => {
                     ))}
                   </div>
 
-                  <br></br>
+                  {/* <br></br> */}
 
                   <div className="flex space-x-4">
                     <label className="text-white">
@@ -96,7 +98,7 @@ const Home = observer(() => {
                         type="radio"
                         value="major"
                         checked={isMajor}
-                        onChange={handleRadioChange}
+                        onChange={handleMajorMinorRadioChange}
                       />
                       Major
                     </label>
@@ -105,9 +107,29 @@ const Home = observer(() => {
                         type="radio"
                         value="minor"
                         checked={!isMajor}
-                        onChange={handleRadioChange}
+                        onChange={handleMajorMinorRadioChange}
                       />
                       Minor
+                    </label>
+                  </div>
+                  <div className="flex space-x-4">
+                    <label className="text-white">
+                      <input
+                        type="radio"
+                        value="notes"
+                        checked={!isChord}
+                        onChange={handleNoteChordRadioChange}
+                      />
+                      Notes
+                    </label>
+                    <label className="text-white">
+                      <input
+                        type="radio"
+                        value="chords"
+                        checked={isChord}
+                        onChange={handleNoteChordRadioChange}
+                      />
+                      Chords
                     </label>
                   </div>
                 </>
@@ -119,25 +141,31 @@ const Home = observer(() => {
 
             <div className="h-2/5 flex justify-center">
 
-              {(selectedIndex !== -1) && <button onClick={() => setShowLab(!showLab)} style={{ color: "white" }}>Lab toggle</button>}
+              {isChord ? (
+                <>
+                  {(selectedIndex !== -1) && <button onClick={() => setShowLab(!showLab)} style={{ color: "white" }}>Lab toggle</button>}
 
-              {(scaleNotes.length === 0) ?
-                null
-                :
-                <div className="flex flex-grow">
-                  {Object.entries(chordNotes).map(([chordNumber, notes]) => {
-                    const chordName = isMajor ? `${scale}${chordNumber}` : `${scale}m${chordNumber}`;
-                    return (
-                      <button
-                        key={chordNumber}
-                        onClick={() => playChord(chordName, notes)}
-                        className="flex-grow bg-white hover:bg-gray-100 text-gray-800 font-semibold py-2 px-4 border border-gray-400 rounded shadow">
-                        {chordNumber}: {NOTE_TO_KEY[notes[0]]} {NOTE_TO_KEY[notes[1]]} {NOTE_TO_KEY[notes[2]]}
-                      </button>
-                    );
-                  })}
-                </div>
-              }
+                  {(scaleNotes.length === 0) ?
+                    null
+                    :
+                    <div className="flex flex-grow">
+                      {Object.entries(chordNotes).map(([chordNumber, notes]) => {
+                        const chordName = isMajor ? `${scale}${chordNumber}` : `${scale}m${chordNumber}`;
+                        return (
+                          <button
+                            key={chordNumber}
+                            onClick={() => playChord(chordName, notes)}
+                            className="flex-grow bg-white hover:bg-gray-100 text-gray-800 font-semibold py-2 px-4 border border-gray-400 rounded shadow">
+                            {chordNumber}: {NOTE_TO_KEY[notes[0]]} {NOTE_TO_KEY[notes[1]]} {NOTE_TO_KEY[notes[2]]}
+                          </button>
+                        );
+                      })}
+                    </div>
+                  }
+                </>
+              ) : (
+                <NoteButtons />
+              )}
 
             </div>
           </div>
@@ -178,7 +206,7 @@ const Home = observer(() => {
                     type="radio"
                     value="major"
                     checked={isMajor}
-                    onChange={handleRadioChange}
+                    onChange={handleMajorMinorRadioChange}
                   />
                   Major
                 </label>
@@ -187,7 +215,7 @@ const Home = observer(() => {
                     type="radio"
                     value="minor"
                     checked={!isMajor}
-                    onChange={handleRadioChange}
+                    onChange={handleMajorMinorRadioChange}
                   />
                   Minor
                 </label>
@@ -240,7 +268,7 @@ const Home = observer(() => {
                     type="radio"
                     value="major"
                     checked={isMajor}
-                    onChange={handleRadioChange}
+                    onChange={handleMajorMinorRadioChange}
                   />
                   Major
                 </label>
@@ -249,7 +277,7 @@ const Home = observer(() => {
                     type="radio"
                     value="minor"
                     checked={!isMajor}
-                    onChange={handleRadioChange}
+                    onChange={handleMajorMinorRadioChange}
                   />
                   Minor
                 </label>
