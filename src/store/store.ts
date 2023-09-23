@@ -183,7 +183,7 @@ class AppStore {
             setTimeout(() => {
                 const noteRemoved = this.pressedKeys.filter((key) => key !== note);
                 this.setPressedKeys(noteRemoved);
-            }, 800);
+            }, 300);
         }
     };
 

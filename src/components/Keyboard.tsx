@@ -1,8 +1,8 @@
 import { useEffect, useContext } from "react";
-import Key from "./Key";
 import { KEY_TO_NOTE, NOTES2, VALID_KEYS } from './../global/constants';
 import { AppStoreContext } from '../context/AppStoreContext';
 import { observer } from 'mobx-react-lite';
+import Key from "./Key";
 
 interface IKeyboardProps {
     scaleNotes: string[],
@@ -53,24 +53,12 @@ const Keyboard = observer((props: IKeyboardProps) => {
         );
     });
 
-    const noteFiles = NOTES2.map((note) => {
-        return (
-            <audio key={note} id={note} src={`./../../notes2/${note}.mp3`} preload="auto" />
-        );
-    });
-
     return (
-        <>
-            <div>
-                <div className="piano">
-                    {keys}
-                </div>
-
-                <div>
-                    {noteFiles}
-                </div>
+        <div>
+            <div className="piano">
+                {keys}
             </div>
-        </>
+        </div>
     );
 
 });
