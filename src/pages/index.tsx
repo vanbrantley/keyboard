@@ -12,11 +12,13 @@ import ChordButtons from './../components/ChordButtons';
 import NotesChordsRadio from './../components/NotesChordsRadio';
 import MajorMinorRadio from './../components/MajorMinorRadio';
 
+import { IconButton } from '@mui/material';
+import TuneIcon from '@mui/icons-material/Tune';
+
 const Home = observer(() => {
 
   const store = useContext(AppStoreContext);
-  const { isMajor, isChord, selectedIndex, scaleNotes, chordNotes,
-    scale, chordFilesInfo, getScale, getChords, playChord, handleNoteChordRadioChange,
+  const { isMajor, isChord, selectedIndex, scaleNotes, chordFilesInfo, getScale, getChords, playChord, handleNoteChordRadioChange,
     showLab, setShowLab } = store;
 
   const [currentLayout, setCurrentLayout] = useState<Layout>(Layout.Desktop);
@@ -78,7 +80,7 @@ const Home = observer(() => {
                 <ProgressionLab />
               ) : (
                 <>
-                  <Keyboard scaleNotes={scaleNotes.slice(0, 8)} />
+                  <Keyboard scaleNotes={scaleNotes.slice(0, 7)} />
                   <NoteButtons layout={Layout.Desktop} />
                   <div className="flex space-x-16">
                     <MajorMinorRadio />
@@ -116,7 +118,7 @@ const Home = observer(() => {
 
               <div className="flex flex-col items-center">
                 <br></br>
-                <MiniKeyboard scaleNotes={scaleNotes.slice(0, 8)} />
+                <MiniKeyboard scaleNotes={scaleNotes.slice(0, 7)} />
               </div>
               <div className="flex flex-col items-center space-y-4">
 
@@ -149,7 +151,7 @@ const Home = observer(() => {
             <div className="h-1/2 space-y-2">
 
               <div className="flex flex-col items-center justify-center">
-                <MiniKeyboard scaleNotes={scaleNotes.slice(0, 8)} />
+                <MiniKeyboard scaleNotes={scaleNotes.slice(0, 7)} />
               </div>
 
               <div className="flex flex-col items-center justify-center space-y-2">
