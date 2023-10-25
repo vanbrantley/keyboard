@@ -67,22 +67,23 @@ const Home = observer(() => {
   });
 
   return (
+
     <div>
       {currentLayout === Layout.Desktop && (
         <div className="h-screen flex">
           <div className="w-full">
 
-            <div className="h-3/5 flex flex-col items-center">
+            <div className="h-3/5 flex flex-col items-center space-y-8">
               {showLab ? (
                 <ProgressionLab />
               ) : (
                 <>
-                  <br></br>
                   <Keyboard scaleNotes={scaleNotes.slice(0, 8)} />
-                  <br></br>
                   <NoteButtons layout={Layout.Desktop} />
-                  <MajorMinorRadio />
-                  <NotesChordsRadio />
+                  <div className="flex space-x-16">
+                    <MajorMinorRadio />
+                    <NotesChordsRadio />
+                  </div>
                 </>
               )}
 
@@ -106,25 +107,28 @@ const Home = observer(() => {
 
         </div>
       )}
+
       {currentLayout === Layout.Mobile && (
         <div className="h-screen flex">
           <div className="w-full">
 
-            <div className="h-1/5 flex flex-col items-center">
-              <br></br>
-              <MiniKeyboard scaleNotes={scaleNotes.slice(0, 8)} />
-            </div>
-            <div className="h-1/5 flex flex-col items-center">
+            <div className="h-1/2 space-y-8">
 
-              <br></br>
-              <NoteButtons layout={Layout.Mobile} />
-              <MajorMinorRadio />
-              <NotesChordsRadio />
+              <div className="flex flex-col items-center">
+                <br></br>
+                <MiniKeyboard scaleNotes={scaleNotes.slice(0, 8)} />
+              </div>
+              <div className="flex flex-col items-center space-y-4">
 
+                <div className="flex space-x-16">
+                  <MajorMinorRadio />
+                  <NotesChordsRadio />
+                </div>
+                <NoteButtons layout={Layout.Mobile} />
+
+              </div>
             </div>
-            <div className="h-3/5 flex flex-col items-center">
-              <br></br>
-              <br></br>
+            <div className="h-1/2 flex flex-col items-center">
 
               {isChord ? (
                 <ChordButtons layout={currentLayout} />
@@ -135,28 +139,32 @@ const Home = observer(() => {
             </div>
 
           </div>
-
         </div>
       )}
+
       {currentLayout === Layout.MobileLandscape && (
         <div className="h-screen flex">
           <div className="w-full">
 
-            <div className="h-2/6 flex flex-col items-center justify-center">
-              <MiniKeyboard scaleNotes={scaleNotes.slice(0, 8)} />
+            <div className="h-1/2 space-y-2">
+
+              <div className="flex flex-col items-center justify-center">
+                <MiniKeyboard scaleNotes={scaleNotes.slice(0, 8)} />
+              </div>
+
+              <div className="flex flex-col items-center justify-center space-y-2">
+
+                <div className="flex space-x-16">
+                  <MajorMinorRadio />
+                  <NotesChordsRadio />
+                </div>
+
+                <NoteButtons layout={Layout.MobileLandscape} />
+
+              </div>
             </div>
 
-            <div className="h-2/6 flex flex-col items-center justify-center">
-
-              <br></br>
-              <MajorMinorRadio />
-              <NotesChordsRadio />
-              <NoteButtons layout={Layout.MobileLandscape} />
-
-              <br></br>
-            </div>
-
-            <div className="h-2/6 flex justify-center">
+            <div className="h-1/2 flex justify-center">
 
               {isChord ? (
                 <ChordButtons layout={currentLayout} />
@@ -168,7 +176,6 @@ const Home = observer(() => {
           </div>
         </div>
       )}
-
 
       <div>
         {chordFiles}

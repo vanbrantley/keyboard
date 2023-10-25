@@ -9,7 +9,7 @@ const NotesChordsRadio = observer(() => {
 
     return (
 
-        <div className="flex space-x-4">
+        <div className="flex space-x-2">
             <label className="text-white">
                 <input
                     type="radio"
