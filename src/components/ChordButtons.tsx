@@ -37,13 +37,15 @@ const ChordButtons = observer((props: IChordButtonsProps) => {
         <div className={outerDivClassName} style={styleName}>
             {Object.entries(chordNotes).map(([chordNumber, notes]) => {
                 const chordName = isMajor ? `${scale}${chordNumber}` : `${scale}m${chordNumber}`;
+                const noteLetters = notes.map(note => note.replace(/\d/g, ' '));
                 return (
                     <button
                         key={chordNumber}
                         onClick={() => playChord(chordName, notes)}
                         className={buttonClassName}
                     >
-                        {chordNumber}
+                        <p style={{ margin: 0, marginBottom: '24px', fontFamily: "Verdana", fontSize: "24px" }}>{chordNumber}</p>
+                        {(layout != Layout.MobileLandscape) && <p style={{ margin: 0, fontFamily: "Verdana", fontSize: "24px" }}>{noteLetters.join(' ')}</p>}
                     </button>
                 );
             })}

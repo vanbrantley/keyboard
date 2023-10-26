@@ -25,7 +25,7 @@ const Key = observer((props: IKeyProps) => {
 
     return (
         <div className={keyClassName} onClick={() => playNote(note)}>
-            <div className={keyTextClassName}>{NOTE_TO_KEY[note]}</div>
+            <div className={keyTextClassName} style={{ fontFamily: "Verdana" }}>{NOTE_TO_KEY[note]}</div>
         </div>
     );
 
