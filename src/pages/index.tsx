@@ -5,21 +5,15 @@ import { NOTES2 } from './../global/constants';
 import { Layout } from './../global/enums';
 import Keyboard from './../components/Keyboard';
 import MiniKeyboard from './../components/MiniKeyboard';
-import ProgressionLab from './../components/ProgressionLab';
 import PlayNoteButtons from '../components/PlayNoteButtons';
-import NoteButtons from './../components/NoteButtons';
 import ChordButtons from './../components/ChordButtons';
-import NotesChordsRadio from './../components/NotesChordsRadio';
-import MajorMinorRadio from './../components/MajorMinorRadio';
-
-import { IconButton } from '@mui/material';
-import TuneIcon from '@mui/icons-material/Tune';
+import ConfigModal from './../components/ConfigModal';
+import Configuration from './../components/Configuration';
 
 const Home = observer(() => {
 
   const store = useContext(AppStoreContext);
-  const { isMajor, isChord, selectedIndex, scaleNotes, chordFilesInfo, getScale, getChords, playChord, handleNoteChordRadioChange,
-    showLab, setShowLab } = store;
+  const { isMajor, isChord, selectedIndex, scaleNotes, chordFilesInfo, getScale, getChords, showConfigModal, setShowConfigModal } = store;
 
   const [currentLayout, setCurrentLayout] = useState<Layout>(Layout.Desktop);
 
@@ -68,6 +62,24 @@ const Home = observer(() => {
     );
   });
 
+  // 0 key to show/hide config modal
+  useEffect(() => {
+    const handleKeyPress = (event: KeyboardEvent) => {
+      if (event.key === '0') {
+        // Toggle the state of showConfigModal
+        setShowConfigModal(!showConfigModal);
+      }
+    };
+
+    // Add the event listener when the component mounts
+    window.addEventListener('keydown', handleKeyPress);
+
+    // Remove the event listener when the component unmounts
+    return () => {
+      window.removeEventListener('keydown', handleKeyPress);
+    };
+  }, [showConfigModal]);
+
   return (
 
     <div>
@@ -76,21 +88,10 @@ const Home = observer(() => {
           <div className="w-full">
 
             <div className="h-3/5 flex flex-col items-center space-y-8">
-              {showLab ? (
-                <ProgressionLab />
-              ) : (
-                <>
-                  <Keyboard scaleNotes={scaleNotes.slice(0, 7)} />
-                  <NoteButtons layout={Layout.Desktop} />
-                  <div className="flex space-x-16">
-                    <MajorMinorRadio />
-                    <NotesChordsRadio />
-                  </div>
-                </>
-              )}
-
-              <br></br>
-
+              <br />
+              <Keyboard scaleNotes={scaleNotes.slice(0, 7)} />
+              <Configuration />
+              <br />
             </div>
 
             <div className="h-2/5 flex justify-center">
@@ -101,7 +102,9 @@ const Home = observer(() => {
                   <ChordButtons layout={currentLayout} />
                 </>
               ) : (
-                <PlayNoteButtons mobileLayout={false} />
+                <>
+                  <PlayNoteButtons mobileLayout={false} />
+                </>
               )}
 
             </div>
@@ -117,18 +120,11 @@ const Home = observer(() => {
             <div className="h-1/2 space-y-8">
 
               <div className="flex flex-col items-center">
-                <br></br>
+                <br />
                 <MiniKeyboard scaleNotes={scaleNotes.slice(0, 7)} />
+                <Configuration />
               </div>
-              <div className="flex flex-col items-center space-y-4">
 
-                <div className="flex space-x-16">
-                  <MajorMinorRadio />
-                  <NotesChordsRadio />
-                </div>
-                <NoteButtons layout={Layout.Mobile} />
-
-              </div>
             </div>
             <div className="h-1/2 flex flex-col items-center">
 
@@ -152,18 +148,9 @@ const Home = observer(() => {
 
               <div className="flex flex-col items-center justify-center">
                 <MiniKeyboard scaleNotes={scaleNotes.slice(0, 7)} />
+                <Configuration />
               </div>
 
-              <div className="flex flex-col items-center justify-center space-y-2">
-
-                <div className="flex space-x-16">
-                  <MajorMinorRadio />
-                  <NotesChordsRadio />
-                </div>
-
-                <NoteButtons layout={Layout.MobileLandscape} />
-
-              </div>
             </div>
 
             <div className="h-1/2 flex justify-center">
@@ -178,6 +165,8 @@ const Home = observer(() => {
           </div>
         </div>
       )}
+
+      <ConfigModal />
 
       <div>
         {chordFiles}

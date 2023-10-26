@@ -15,6 +15,7 @@ class AppStore {
     chordNotes: StringArrayDictionary = {};
     pressedKeys: string[] = [];
     showLab = false;
+    showConfigModal = false;
     progressionChordIndices: number[] = [];
 
     constructor() {
@@ -28,6 +29,7 @@ class AppStore {
             chordNotes: observable,
             pressedKeys: observable,
             showLab: observable,
+            showConfigModal: observable,
             progressionChordIndices: observable,
             scale: computed,
             chordNames: computed,
@@ -36,7 +38,6 @@ class AppStore {
         });
 
     }
-
 
     // computed functions
     get scale() {
@@ -87,6 +88,10 @@ class AppStore {
 
     setShowLab = action((newValue: boolean) => {
         this.showLab = newValue;
+    });
+
+    setShowConfigModal = action((newValue: boolean) => {
+        this.showConfigModal = newValue;
     });
 
     setProgressionChordIndices = action((newValue: number[]) => {
@@ -191,24 +196,6 @@ class AppStore {
 
         if (index === this.selectedIndex) this.setSelectedIndex(-1);
         else this.setSelectedIndex(index);
-
-    });
-
-    handleMajorMinorRadioChange = action((event: React.ChangeEvent<HTMLInputElement>) => {
-
-        const newValue = event.target.value === 'major';
-        if (newValue !== this.isMajor) {
-            this.setIsMajor(newValue);
-        }
-
-    });
-
-    handleNoteChordRadioChange = action((event: React.ChangeEvent<HTMLInputElement>) => {
-
-        const newValue = event.target.value === 'chords';
-        if (newValue !== this.isChord) {
-            this.setIsChord(newValue);
-        }
 
     });
 

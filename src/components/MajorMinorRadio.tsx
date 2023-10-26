@@ -5,29 +5,35 @@ import { observer } from 'mobx-react-lite';
 const MajorMinorRadio = observer(() => {
 
     const store = useContext(AppStoreContext);
-    const { isMajor, handleMajorMinorRadioChange } = store;
+    const { isMajor, setIsMajor } = store;
+
+    const handleMajorButton = () => {
+        if (!isMajor) {
+            setIsMajor(true);
+        }
+    };
+
+    const handleMinorButton = () => {
+        if (isMajor) {
+            setIsMajor(false);
+        }
+    };
 
     return (
 
         <div className="flex space-x-2">
-            <label className="text-white">
-                <input
-                    type="radio"
-                    value="major"
-                    checked={isMajor}
-                    onChange={handleMajorMinorRadioChange}
-                />
+            <button
+                className={`${isMajor ? 'bg-black text-white' : 'bg-white text-black'} text-white cursor-pointer font-semibold py-2 px-4 border border-gray-400 rounded shadow flex justify-center items-center`}
+                onClick={handleMajorButton}
+            >
                 Major
-            </label>
-            <label className="text-white">
-                <input
-                    type="radio"
-                    value="minor"
-                    checked={!isMajor}
-                    onChange={handleMajorMinorRadioChange}
-                />
+            </button>
+            <button
+                className={`${isMajor ? 'bg-white text-black' : 'bg-black text-white'} text-white cursor-pointer font-semibold py-2 px-4 border border-gray-400 rounded shadow flex justify-center items-center`}
+                onClick={handleMinorButton}
+            >
                 Minor
-            </label>
+            </button>
         </div>
 
     );
