@@ -23,13 +23,13 @@ const MajorMinorRadio = observer(() => {
 
         <div className="flex space-x-2">
             <button
-                className={`${isMajor ? 'bg-black text-white' : 'bg-white text-black'} text-white cursor-pointer font-semibold py-2 px-4 border border-gray-400 rounded shadow flex justify-center items-center`}
+                className={`${isMajor ? 'bg-black text-white' : 'bg-white text-black'} cursor-pointer font-semibold py-2 px-4 border border-gray-400 rounded shadow flex justify-center items-center`}
                 onClick={handleMajorButton}
             >
                 Major
             </button>
             <button
-                className={`${isMajor ? 'bg-white text-black' : 'bg-black text-white'} text-white cursor-pointer font-semibold py-2 px-4 border border-gray-400 rounded shadow flex justify-center items-center`}
+                className={`${isMajor ? 'bg-white text-black' : 'bg-black text-white'} cursor-pointer font-semibold py-2 px-4 border border-gray-400 rounded shadow flex justify-center items-center`}
                 onClick={handleMinorButton}
             >
                 Minor

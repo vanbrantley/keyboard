@@ -117,16 +117,16 @@ const Home = observer(() => {
         <div className="h-screen flex">
           <div className="w-full">
 
-            <div className="h-1/2 space-y-8">
+            <div className="h-1/3 space-y-4">
 
-              <div className="flex flex-col items-center">
+              <div className="flex flex-col items-center space-y-4">
                 <br />
                 <MiniKeyboard scaleNotes={scaleNotes.slice(0, 7)} />
                 <Configuration />
               </div>
 
             </div>
-            <div className="h-1/2 flex flex-col items-center">
+            <div className="h-2/3 flex flex-col items-center">
 
               {isChord ? (
                 <ChordButtons layout={currentLayout} />
@@ -146,7 +146,8 @@ const Home = observer(() => {
 
             <div className="h-1/2 space-y-2">
 
-              <div className="flex flex-col items-center justify-center">
+              <div className="flex flex-col items-center">
+                <br />
                 <MiniKeyboard scaleNotes={scaleNotes.slice(0, 7)} />
                 <Configuration />
               </div>
@@ -166,7 +167,7 @@ const Home = observer(() => {
         </div>
       )}
 
-      <ConfigModal />
+      <ConfigModal layout={currentLayout} />
 
       <div>
         {chordFiles}
