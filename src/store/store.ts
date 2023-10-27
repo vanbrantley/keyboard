@@ -47,8 +47,8 @@ class AppStore {
     get chordNames() {
         return this.selectedIndex !== -1
             ? (this.isMajor
-                ? [`${this.scale}I`, `${this.scale}ii`, `${this.scale}iii`, `${this.scale}IV`, `${this.scale}V`, `${this.scale}vi`, `${this.scale}vii°`]
-                : [`${this.scale}mi`, `${this.scale}mii°`, `${this.scale}mIII`, `${this.scale}miv`, `${this.scale}mv`, `${this.scale}mVI`, `${this.scale}mVII`])
+                ? [`${this.scale}I1`, `${this.scale}ii`, `${this.scale}iii`, `${this.scale}IV`, `${this.scale}V`, `${this.scale}vi`, `${this.scale}vii°`, `${this.scale}I2`,]
+                : [`${this.scale}mi1`, `${this.scale}mii°`, `${this.scale}mIII`, `${this.scale}miv`, `${this.scale}mv`, `${this.scale}mVI`, `${this.scale}mVII`, `${this.scale}mi2`,])
             : [];
     };
 
@@ -129,7 +129,10 @@ class AppStore {
 
         // major - W W H W W W H
         // minor - W H W W H W W
-        var indices = this.isMajor ? [index, index + 2, index + 4, index + 5, index + 7, index + 9, index + 11, index + 12, index + 14, index + 16, index + 17] : [index, index + 2, index + 3, index + 5, index + 7, index + 8, index + 10, index + 12, index + 14, index + 15, index + 17];
+        // added one more note to scale to complete
+        var indices = this.isMajor ?
+            [index, index + 2, index + 4, index + 5, index + 7, index + 9, index + 11, index + 12, index + 14, index + 16, index + 17, index + 19]
+            : [index, index + 2, index + 3, index + 5, index + 7, index + 8, index + 10, index + 12, index + 14, index + 15, index + 17, index + 19];
 
         // map over indices array, extract elements from notes array
         var scale = indices.map(i => NOTES2[i]);
@@ -144,17 +147,21 @@ class AppStore {
             return;
         }
 
-        var scale2 = this.scaleNotes.concat(this.scaleNotes);
-        var chordNums = this.isMajor ? ['I', 'ii', 'iii', 'IV', 'V', 'vi', 'vii°'] : ['i', 'ii°', 'III', 'iv', 'v', 'VI', 'VII'];
+        // dont think you need scale2, just need a C2 appended at the end of the scale - don't think it's always a 2 though
+        // want the number that's at the end of the last element in scale, then append the root note concat that number + 1
+
+        var scaleNotes = this.scaleNotes;
+
+        var chordNums = this.isMajor ? ['I1', 'ii', 'iii', 'IV', 'V', 'vi', 'vii°', 'I2'] : ['i1', 'ii°', 'III', 'iv', 'v', 'VI', 'VII', 'i2'];
         var chords: StringArrayDictionary = {};
 
-        for (let i = 0; i < 7; i++) {
-            chords[chordNums[i]] = [scale2[i], scale2[i + 2], scale2[i + 4]];
+        for (let i = 0; i < chordNums.length; i++) {
+            chords[chordNums[i]] = [this.scaleNotes[i], this.scaleNotes[i + 2], this.scaleNotes[i + 4]];
         }
 
         this.setChordNotes(chords);
 
-        // console.log("Scale notes: ", this.scaleNotes);
+        // console.log("Scale notes: ", scaleNotes);
         // console.log("Chords: ", chords);
 
     });

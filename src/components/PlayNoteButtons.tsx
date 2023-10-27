@@ -26,7 +26,7 @@ const PlayNoteButtons = observer((props: IPlayNoteButtonsProps) => {
                         key={note}
                         onClick={() => playNote(note)}
                         className={`flex-grow ${isFlat ? ("bg-black text-white hover:bg-zinc-900") : ("bg-white text-gray-800 hover:bg-gray-300")} font-semibold py-2 px-4 border border-gray-400 rounded shadow`}>
-                        {noteName}
+                        <p style={{ fontFamily: "Verdana", fontSize: "24px" }}>{noteName}</p>
                     </button>
                 );
             })}

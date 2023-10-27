@@ -16,6 +16,8 @@ const ChordButtons = observer((props: IChordButtonsProps) => {
 
     let outerDivClassName = ""
     let buttonClassName = "";
+    let marginBottom = "32px";
+    let fontSize = "24px";
     const styleName = ((layout == Layout.Mobile) ? { width: "100%", height: "100%" } : {});
 
     switch (layout) {
@@ -26,16 +28,21 @@ const ChordButtons = observer((props: IChordButtonsProps) => {
         case Layout.Mobile:
             outerDivClassName = "grid grid-cols-2";
             buttonClassName = "h-full bg-white hover:bg-gray-100 text-gray-800 font-semibold py-2 px-4 border border-gray-400 rounded shadow";
+            marginBottom = "12px";
+            fontSize = "18px";
             break;
         case Layout.MobileLandscape:
             outerDivClassName = "flex flex-grow";
             buttonClassName = "flex-grow bg-white hover:bg-gray-100 text-gray-800 font-semibold py-2 px-4 border border-gray-400 rounded shadow";
+            marginBottom = "12px";
+            fontSize = "24px";
             break;
     };
 
     return (
         <div className={outerDivClassName} style={styleName}>
             {Object.entries(chordNotes).map(([chordNumber, notes]) => {
+
                 const chordName = isMajor ? `${scale}${chordNumber}` : `${scale}m${chordNumber}`;
                 const noteLetters = notes.map(note => note.replace(/\d/g, ' '));
                 return (
@@ -44,8 +51,8 @@ const ChordButtons = observer((props: IChordButtonsProps) => {
                         onClick={() => playChord(chordName, notes)}
                         className={buttonClassName}
                     >
-                        <p style={{ margin: 0, marginBottom: '24px', fontFamily: "Verdana", fontSize: "24px" }}>{chordNumber}</p>
-                        {(layout != Layout.MobileLandscape) && <p style={{ margin: 0, fontFamily: "Verdana", fontSize: "24px" }}>{noteLetters.join(' ')}</p>}
+                        <p style={{ margin: 0, marginBottom: marginBottom, fontFamily: "Verdana", fontSize: fontSize }}>{chordNumber}</p>
+                        {(layout != Layout.MobileLandscape) && <p style={{ margin: 0, fontFamily: "Verdana", fontSize: fontSize }}>{noteLetters.join(' ')}</p>}
                     </button>
                 );
             })}
