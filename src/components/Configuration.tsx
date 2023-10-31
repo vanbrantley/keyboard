@@ -16,7 +16,10 @@ const Configuration = observer(() => {
 
     return (
         <div className="flex items-center space-x-4">
-            <p style={{ color: "white", fontFamily: "Verdana", fontSize: "24px" }}>{NOTES[selectedIndex]} {isMajor ? "Major" : "Minor"} {isChord ? "chords" : "notes"}</p>
+            {(selectedIndex != -1) ?
+                <p style={{ color: "white", fontFamily: "Verdana", fontSize: "24px" }}>{NOTES[selectedIndex]} {isMajor ? "Major" : "Minor"} {isChord ? "chords" : "notes"}</p>
+                : <p style={{ color: "gray", fontFamily: "Verdana", fontSize: "24px" }}>Click configuration button to view a scale</p>
+            }
             <IconButton size="large" onClick={handleOpenModal}>
                 <TuneIcon fontSize="large" style={{ color: "gray" }} />
             </IconButton>

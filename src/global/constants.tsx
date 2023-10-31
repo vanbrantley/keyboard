@@ -35,7 +35,8 @@ const KEY_TO_NOTE: KeyToNoteMapping = {
     '.': 'D2',
     ';': 'Eb2',
     '/': 'E2',
-
+    "'": 'F2',
+    ']': 'Gb2'
 };
 
 type NoteToKeyMapping = {
@@ -72,8 +73,10 @@ const NOTE_TO_KEY: NoteToKeyMapping = {
     "D2": '.',
     "Eb2": ';',
     "E2": '/',
+    "F2": "'",
+    "Gb2": ']'
 };
 
-const VALID_KEYS = ['w', '3', 'e', '4', 'r', 't', '6', 'y', '7', 'u', '8', 'i', 'z', 's', 'x', 'd', 'c', 'v', 'g', 'b', 'h', 'n', 'j', 'm', ',', 'l', '.', ';', '/'];
+const VALID_KEYS = ['w', '3', 'e', '4', 'r', 't', '6', 'y', '7', 'u', '8', 'i', 'z', 's', 'x', 'd', 'c', 'v', 'g', 'b', 'h', 'n', 'j', 'm', ',', 'l', '.', ';', '/', "'", ']'];
 
 export { NOTES, NOTES2, KEY_TO_NOTE, NOTE_TO_KEY, VALID_KEYS };

@@ -2,6 +2,7 @@ import { useContext } from 'react';
 import { AppStoreContext } from '../context/AppStoreContext';
 import { observer } from 'mobx-react-lite';
 import { Layout } from './../global/enums';
+import { NOTE_TO_KEY } from "../global/constants";
 
 interface IChordButtonsProps {
     layout: Layout,
@@ -44,6 +45,11 @@ const ChordButtons = observer((props: IChordButtonsProps) => {
             {Object.entries(chordNotes).map(([chordNumber, notes]) => {
 
                 const chordName = isMajor ? `${scale}${chordNumber}` : `${scale}m${chordNumber}`;
+
+                const content = (layout === Layout.Desktop)
+                    ? notes.map(note => NOTE_TO_KEY[note]).join(' ')
+                    : notes.map(note => note.replace(/\d/g, ' ')).join(' ');
+
                 const noteLetters = notes.map(note => note.replace(/\d/g, ' '));
                 return (
                     <button
@@ -51,8 +57,10 @@ const ChordButtons = observer((props: IChordButtonsProps) => {
                         onClick={() => playChord(chordName, notes)}
                         className={buttonClassName}
                     >
-                        <p style={{ margin: 0, marginBottom: marginBottom, fontFamily: "Verdana", fontSize: fontSize }}>{chordNumber}</p>
-                        {(layout != Layout.MobileLandscape) && <p style={{ margin: 0, fontFamily: "Verdana", fontSize: fontSize }}>{noteLetters.join(' ')}</p>}
+                        <p style={{ margin: 0, marginBottom: marginBottom, fontFamily: "Verdana", fontSize: fontSize }}>
+                            {chordNumber.replace(/[12]$/, '')}
+                        </p>
+                        {(layout != Layout.MobileLandscape) && <p style={{ margin: 0, fontFamily: "Verdana", fontSize: fontSize }}>{content}</p>}
                     </button>
                 );
             })}
