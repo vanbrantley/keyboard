@@ -13,7 +13,7 @@ import Configuration from './../components/Configuration';
 const Home = observer(() => {
 
   const store = useContext(AppStoreContext);
-  const { isMajor, isChord, selectedIndex, scaleNotes, chordFilesInfo, getScale, getChords, showConfigModal, setShowConfigModal, setShowLab, showLab } = store;
+  const { isMajor, isChord, selectedIndex, scaleNotes, allScaleNotes, chordFilesInfo, getScale, getChords, showConfigModal, setShowConfigModal, setShowLab, showLab } = store;
 
   const [currentLayout, setCurrentLayout] = useState<Layout>(Layout.Desktop);
 
@@ -89,7 +89,8 @@ const Home = observer(() => {
 
             <div className="h-3/5 flex flex-col items-center space-y-8">
               <br />
-              <Keyboard scaleNotes={scaleNotes.slice(0, 8)} />
+              {/* <Keyboard scaleNotes={scaleNotes.slice(0, 8)} /> */}
+              <Keyboard scaleNotes={allScaleNotes} />
               <Configuration />
               <br />
             </div>
@@ -121,7 +122,8 @@ const Home = observer(() => {
 
               <div className="flex flex-col items-center space-y-4">
                 <br />
-                <MiniKeyboard scaleNotes={scaleNotes.slice(0, 8)} />
+                {/* <MiniKeyboard scaleNotes={scaleNotes.slice(0, 8)} /> */}
+                <MiniKeyboard scaleNotes={allScaleNotes} />
                 <Configuration />
               </div>
 
