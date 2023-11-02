@@ -1,15 +1,20 @@
+import { useContext } from 'react';
+import { AppStoreContext } from '../context/AppStoreContext';
+import { observer } from 'mobx-react-lite';
+
 interface IMiniKeyProps {
-    note: string,
-    scaleNotes: string[],
-    pressedKeys: string[]
+    note: string
 }
 
-const MiniKey = (props: IMiniKeyProps) => {
+const MiniKey = observer((props: IMiniKeyProps) => {
 
-    const { note, scaleNotes, pressedKeys } = props;
+    const store = useContext(AppStoreContext);
+    const { allScaleNotes, pressedKeys, playNote } = store;
+
+    const { note } = props;
 
     const isFlat = note.length > 2;
-    const inScale = scaleNotes.includes(note);
+    const inScale = allScaleNotes.includes(note);
     const isPressed = pressedKeys.length == 0 ? false : pressedKeys.includes(note);
 
     const keyClassName = `minikey ${isFlat ? 'flat' : ''} ${inScale ? 'scale' : ''} ${isPressed ? 'pressed' : ''}`;
@@ -18,6 +23,6 @@ const MiniKey = (props: IMiniKeyProps) => {
         <div className={keyClassName}></div>
     );
 
-};
+});
 
 export default MiniKey;

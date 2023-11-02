@@ -4,11 +4,7 @@ import { AppStoreContext } from '../context/AppStoreContext';
 import { observer } from 'mobx-react-lite';
 import Key from "./Key";
 
-interface IKeyboardProps {
-    scaleNotes: string[],
-}
-
-const Keyboard = observer((props: IKeyboardProps) => {
+const Keyboard = observer(() => {
 
     const store = useContext(AppStoreContext);
     const { pressedKeys, setPressedKeys, playNote, selectedIndex } = store;
@@ -51,7 +47,7 @@ const Keyboard = observer((props: IKeyboardProps) => {
 
     const keys = shownNotes.map((note) => {
         return (
-            <Key key={note} note={note} scaleNotes={props.scaleNotes} pressedKeys={pressedKeys} />
+            <Key key={note} note={note} />
         );
     });
 

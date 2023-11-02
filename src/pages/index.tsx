@@ -89,8 +89,7 @@ const Home = observer(() => {
 
             <div className="h-3/5 flex flex-col items-center space-y-8">
               <br />
-              {/* <Keyboard scaleNotes={scaleNotes.slice(0, 8)} /> */}
-              <Keyboard scaleNotes={allScaleNotes} />
+              <Keyboard />
               <Configuration />
               <br />
             </div>
@@ -122,8 +121,7 @@ const Home = observer(() => {
 
               <div className="flex flex-col items-center space-y-4">
                 <br />
-                {/* <MiniKeyboard scaleNotes={scaleNotes.slice(0, 8)} /> */}
-                <MiniKeyboard scaleNotes={allScaleNotes} />
+                <MiniKeyboard />
                 <Configuration />
               </div>
 
@@ -150,7 +148,7 @@ const Home = observer(() => {
 
               <div className="flex flex-col items-center">
                 <br />
-                <MiniKeyboard scaleNotes={scaleNotes.slice(0, 8)} />
+                <MiniKeyboard />
                 <Configuration />
               </div>
 
