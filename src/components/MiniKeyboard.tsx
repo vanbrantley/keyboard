@@ -11,9 +11,11 @@ interface IMiniKeyboardProps {
 const MiniKeyboard = observer((props: IMiniKeyboardProps) => {
 
     const store = useContext(AppStoreContext);
-    const { pressedKeys } = store;
+    const { pressedKeys, selectedIndex } = store;
 
-    const keys = NOTES2.map((note, index) => {
+    const shownNotes = (selectedIndex > 9) ? NOTES2.slice(5) : NOTES2.slice(0, -5);
+
+    const keys = shownNotes.map((note, index) => {
         return (
             <MiniKey key={note} note={note} scaleNotes={props.scaleNotes} pressedKeys={pressedKeys} />
         );

@@ -11,7 +11,7 @@ interface IKeyboardProps {
 const Keyboard = observer((props: IKeyboardProps) => {
 
     const store = useContext(AppStoreContext);
-    const { pressedKeys, setPressedKeys, playNote } = store;
+    const { pressedKeys, setPressedKeys, playNote, selectedIndex } = store;
 
     const handleKeyDown = (event: KeyboardEvent) => {
         if (event.repeat) {
@@ -47,7 +47,9 @@ const Keyboard = observer((props: IKeyboardProps) => {
         };
     }, [pressedKeys]);
 
-    const keys = NOTES2.map((note) => {
+    const shownNotes = (selectedIndex > 9) ? NOTES2.slice(5) : NOTES2.slice(0, -5);
+
+    const keys = shownNotes.map((note) => {
         return (
             <Key key={note} note={note} scaleNotes={props.scaleNotes} pressedKeys={pressedKeys} />
         );

@@ -142,10 +142,6 @@ class AppStore {
 
         const leftBound = 0;
         const rightBound = NOTES2.length - 1;
-        console.log(rightBound);
-        console.log(NOTES2);
-        console.log(NOTES2[leftBound]);
-        console.log(NOTES2[rightBound]);
 
         // want to keep sliding left until left < leftBound, keep sliding right until right > rightBound
         // add to left and right and check those conditions before you ever index the array to avoid outOfBounds errors
@@ -184,12 +180,7 @@ class AppStore {
 
         leftScaleIndices.reverse();
 
-        console.log('Left indices: ', leftScaleIndices);
-        console.log('Normal indicies: ', scaleIndices.slice(0, 8));
-        console.log('Right indices: ', rightScaleIndices);
-
         const allScaleIndices = leftScaleIndices.concat(scaleIndices.slice(0, 8), rightScaleIndices);
-        console.log('All indices: ', allScaleIndices);
 
         // map over indices array, extract elements from notes array
         var scaleNotes = scaleIndices.map(i => NOTES2[i]);
