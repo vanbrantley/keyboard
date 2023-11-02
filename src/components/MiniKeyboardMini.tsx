@@ -43,7 +43,8 @@ const MiniKeyboardMini = (props: IMiniKeyboardMiniProps) => {
 
     const keys = NOTES2.slice(startIndex, endIndex + 1).map((note, index) => {
         return (
-            <MiniKey key={note} note={note} scaleNotes={props.chordNotes} pressedKeys={[]} />
+            // <MiniKey key={note} note={note} scaleNotes={props.chordNotes} pressedKeys={[]} />
+            <MiniKey key={note} note={note} />
         );
     });
 
