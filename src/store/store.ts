@@ -15,6 +15,7 @@ class AppStore {
     allScaleNotes: string[] = [];
     chordNotes: StringArrayDictionary = {};
     pressedKeys: string[] = [];
+    timeoutId: NodeJS.Timeout | null = null;
     showLab = false;
     showConfigModal = false;
     progressionChordIndices: number[] = [];
@@ -217,12 +218,24 @@ class AppStore {
             const chordAudio = new Audio((document.getElementById(chordName) as HTMLAudioElement)?.src || '');
             chordAudio.play();
 
-            // add keys to pressedKeys array for a second
+            // clear existing timeout
+            if (this.timeoutId) {
+                clearTimeout(this.timeoutId);
+                // clear existing pressedKeys when there's an existing timeout
+                this.setPressedKeys([]);
+            }
+
+            // add keys to pressedKeys array for time interval
             this.setPressedKeys([...this.pressedKeys, ...notes]);
 
-            setTimeout(() => {
-                const notesRemoved = this.pressedKeys.filter((key) => !notes.includes(key));
+            // store current pressedKeys state
+            const currentPressedKeys = [...this.pressedKeys];
+
+            // remove chord keys from pressedKeys
+            this.timeoutId = setTimeout(() => {
+                const notesRemoved = currentPressedKeys.filter((key) => !notes.includes(key));
                 this.setPressedKeys(notesRemoved);
+                this.timeoutId = null;
             }, 800);
 
         }
