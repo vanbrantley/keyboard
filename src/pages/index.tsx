@@ -5,7 +5,7 @@ import { NOTES2 } from './../global/constants';
 import { Layout } from './../global/enums';
 import Keyboard from './../components/Keyboard';
 import MiniKeyboard from './../components/MiniKeyboard';
-import PlayNoteButtons from '../components/PlayNoteButtons';
+import NoteButtons from '../components/NoteButtons';
 import ChordButtons from './../components/ChordButtons';
 import ConfigModal from './../components/ConfigModal';
 import Configuration from './../components/Configuration';
@@ -13,10 +13,11 @@ import Configuration from './../components/Configuration';
 const Home = observer(() => {
 
   const store = useContext(AppStoreContext);
-  const { isMajor, isChord, selectedIndex, scaleNotes, allScaleNotes, chordFilesInfo, getScale, getChords, showConfigModal, setShowConfigModal, setShowLab, showLab } = store;
+  const { isMajor, isChord, selectedIndex, scaleNotes, chordFilesInfo, getScale, getChords, showConfigModal, setShowConfigModal } = store;
 
   const [currentLayout, setCurrentLayout] = useState<Layout>(Layout.Desktop);
 
+  // conditionally set currentLayout state variable based on window width (screen size)
   const checkLayout = () => {
     if (window.innerWidth > 896) {
       setCurrentLayout(Layout.Desktop);
@@ -36,7 +37,6 @@ const Home = observer(() => {
     };
   }, []);
 
-  // keep these useEffects until you implement mobx store autorun
   // get scale notes once the index or scale type changes
   useEffect(() => {
     getScale(selectedIndex)
@@ -49,7 +49,7 @@ const Home = observer(() => {
   let chordFiles: JSX.Element[] = [];
 
   if (selectedIndex !== -1) {
-    chordFiles = chordFilesInfo.map((chord, index) => {
+    chordFiles = chordFilesInfo.map((chord) => {
       return (
         <audio key={chord.key} id={chord.id} src={chord.src} preload={chord.preload} />
       );
@@ -62,11 +62,11 @@ const Home = observer(() => {
     );
   });
 
-  // 0 key to show/hide config modal
+  // Press 0 key to show/hide config modal
   useEffect(() => {
     const handleKeyPress = (event: KeyboardEvent) => {
       if (event.key === '0') {
-        // Toggle the state of showConfigModal
+        // Toggle state of showConfigModal
         setShowConfigModal(!showConfigModal);
       }
     };
@@ -83,6 +83,8 @@ const Home = observer(() => {
   return (
 
     <div>
+
+      {/* Desktop Layout */}
       {currentLayout === Layout.Desktop && (
         <div className="h-screen flex">
           <div className="w-full">
@@ -98,12 +100,11 @@ const Home = observer(() => {
 
               {isChord ? (
                 <>
-                  {/* {(selectedIndex !== -1) && <button onClick={() => setShowLab(!showLab)} style={{ color: "white" }}>Lab toggle</button>} */}
                   <ChordButtons layout={currentLayout} />
                 </>
               ) : (
                 <>
-                  <PlayNoteButtons mobileLayout={false} />
+                  <NoteButtons mobileLayout={false} />
                 </>
               )}
 
@@ -113,6 +114,7 @@ const Home = observer(() => {
         </div>
       )}
 
+      {/* Mobile Layout */}
       {currentLayout === Layout.Mobile && (
         <div className="h-screen flex">
           <div className="w-full">
@@ -131,7 +133,7 @@ const Home = observer(() => {
               {isChord ? (
                 <ChordButtons layout={currentLayout} />
               ) : (
-                <PlayNoteButtons mobileLayout={true} />
+                <NoteButtons mobileLayout={true} />
               )}
 
             </div>
@@ -140,6 +142,7 @@ const Home = observer(() => {
         </div>
       )}
 
+      {/* Mobile Landscape Layout */}
       {currentLayout === Layout.MobileLandscape && (
         <div className="h-screen flex">
           <div className="w-full">
@@ -159,7 +162,7 @@ const Home = observer(() => {
               {isChord ? (
                 <ChordButtons layout={currentLayout} />
               ) : (
-                <PlayNoteButtons mobileLayout={false} />
+                <NoteButtons mobileLayout={false} />
               )}
             </div>
 
@@ -169,6 +172,7 @@ const Home = observer(() => {
 
       <ConfigModal layout={currentLayout} />
 
+      {/* Render audio elements to be triggered by components */}
       <div>
         {chordFiles}
       </div>

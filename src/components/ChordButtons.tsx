@@ -15,11 +15,12 @@ const ChordButtons = observer((props: IChordButtonsProps) => {
 
     const { layout } = props;
 
-    let outerDivClassName = ""
+    // conditional style settings based on layout
+    const styleName = ((layout == Layout.Mobile) ? { width: "100%", height: "100%" } : {});
+    let outerDivClassName = "";
     let buttonClassName = "";
     let marginBottom = "32px";
     let fontSize = "24px";
-    const styleName = ((layout == Layout.Mobile) ? { width: "100%", height: "100%" } : {});
 
     switch (layout) {
         case Layout.Desktop:
@@ -46,11 +47,11 @@ const ChordButtons = observer((props: IChordButtonsProps) => {
 
                 const chordName = isMajor ? `${scale}${chordNumber}` : `${scale}m${chordNumber}`;
 
-                const content = (layout === Layout.Desktop)
-                    ? notes.map(note => NOTE_TO_KEY[note]).join(' ')
-                    : notes.map(note => note.replace(/\d/g, ' ')).join(' ');
+                const noteKeyboardKeys = notes.map(note => NOTE_TO_KEY[note]).join(' ');
+                const noteLetters = notes.map(note => note.replace(/\d/g, ' ')).join(' '); // remove training octave number from note
 
-                const noteLetters = notes.map(note => note.replace(/\d/g, ' '));
+                const content = (layout === Layout.Desktop) ? noteKeyboardKeys : noteLetters;
+
                 return (
                     <button
                         key={chordNumber}
@@ -60,7 +61,11 @@ const ChordButtons = observer((props: IChordButtonsProps) => {
                         <p style={{ margin: 0, marginBottom: marginBottom, fontFamily: "Verdana", fontSize: fontSize }}>
                             {chordNumber.replace(/[12]$/, '')}
                         </p>
-                        {(layout != Layout.MobileLandscape) && <p style={{ margin: 0, fontFamily: "Verdana", fontSize: fontSize }}>{content}</p>}
+                        {(layout != Layout.MobileLandscape) &&
+                            <p style={{ margin: 0, fontFamily: "Verdana", fontSize: fontSize }}>
+                                {content}
+                            </p>
+                        }
                     </button>
                 );
             })}

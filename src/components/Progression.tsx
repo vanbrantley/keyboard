@@ -25,7 +25,8 @@ const Progression = observer(() => {
                 {progressionChordIndices.map((index, i) => {
                     const [name, notes] = getKeyValuePairAtIndex(chordNotes, index);
                     return (
-                        <div key={i} onClick={() => removeProgressionChordIndex(i)} className="flex flex-col items-center hover:opacity-60 cursor-pointer">
+                        <div key={i} onClick={() => removeProgressionChordIndex(i)}
+                            className="flex flex-col items-center hover:opacity-60 cursor-pointer">
                             <p style={{ color: "white" }}>{name}</p>
                             <MiniKeyboardMini chordNotes={notes} />
                         </div>

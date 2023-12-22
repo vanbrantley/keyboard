@@ -1,11 +1,12 @@
 import { useContext } from 'react';
 import { AppStoreContext } from '../context/AppStoreContext';
 import { observer } from 'mobx-react-lite';
-import { Modal, Dialog } from '@mui/material';
 import { NOTES } from './../global/constants';
+import { Layout } from './../global/enums';
 import NotesChordsRadio from './../components/NotesChordsRadio';
 import MajorMinorRadio from './../components/MajorMinorRadio';
-import { Layout } from './../global/enums';
+import ConfigNoteButtons from './ConfigNoteButtons';
+import { Modal, Dialog } from '@mui/material';
 
 interface IConfigModalProps {
     layout: Layout,
@@ -14,27 +15,9 @@ interface IConfigModalProps {
 const ConfigModal = observer((props: IConfigModalProps) => {
 
     const store = useContext(AppStoreContext);
-    const { selectedIndex, handleScaleButtonClick, showConfigModal, setShowConfigModal } = store;
+    const { showConfigModal, handleCloseModal } = store;
 
     const { layout } = props;
-
-    const handleCloseModal = () => {
-        setShowConfigModal(false);
-    };
-
-    let gridClassName = "";
-
-    switch (layout) {
-        case Layout.Desktop:
-            gridClassName = "grid grid-cols-4";
-            break;
-        case Layout.Mobile:
-            gridClassName = "grid grid-cols-3";
-            break;
-        case Layout.MobileLandscape:
-            gridClassName = "grid grid-cols-6";
-            break;
-    };
 
     return (
 
@@ -46,18 +29,7 @@ const ConfigModal = observer((props: IConfigModalProps) => {
                     <div className="flex-grow w-full space-y-8">
                         <div className="space-y-4">
                             <p style={{ fontFamily: "Verdana", color: "white" }}>Select Scale</p>
-                            <div className={gridClassName}>
-                                {NOTES.map((note, index) => (
-                                    <button
-                                        key={note}
-                                        onClick={() => handleScaleButtonClick(index)}
-                                        className={`${selectedIndex === index ? 'bg-gray-500 text-white' : 'bg-white hover:bg-gray-100 text-gray-800'
-                                            } font-semibold py-2 px-4 border border-gray-400 rounded shadow flex justify-center items-center`}
-                                    >
-                                        {note}
-                                    </button>
-                                ))}
-                            </div>
+                            <ConfigNoteButtons layout={layout} />
                         </div>
 
                         <div className="space-y-4">
@@ -83,7 +55,6 @@ const ConfigModal = observer((props: IConfigModalProps) => {
                                 Close
                             </button>
                         </div>
-
                     </div>
 
                 </div>

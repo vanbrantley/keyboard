@@ -1,5 +1,5 @@
 import { observable, action, computed, makeObservable } from 'mobx';
-import { NOTES, NOTES2 } from './../global/constants';
+import { NOTES, NOTES2, KEY_TO_NOTE, VALID_KEYS, MAJOR_STEPS, MINOR_STEPS } from './../global/constants';
 
 type StringArrayDictionary = {
     [key: string]: string[];
@@ -11,11 +11,12 @@ class AppStore {
     isMajor = true;
     isChord = false;
     selectedIndex = -1;
-    scaleNotes: string[] = [];
-    allScaleNotes: string[] = [];
+    scaleNotes: string[] = []; // one ocatve of scale notes
+    allScaleNotes: string[] = []; // contains all notes on the keyboard that are in the scale
     chordNotes: StringArrayDictionary = {};
     pressedKeys: string[] = [];
     timeoutId: NodeJS.Timeout | null = null;
+
     showLab = false;
     showConfigModal = false;
     progressionChordIndices: number[] = [];
@@ -119,38 +120,60 @@ class AppStore {
 
 
     // updating functions
-    addPressedKey = action((newKey: string) => {
-        this.pressedKeys.push(newKey);
+    addPressedNote = action((newNote: string) => {
+        this.pressedKeys.push(newNote);
     });
 
-    removePressedKey = action((keyToRemove: string) => {
-        this.pressedKeys = this.pressedKeys.filter((key) => key !== keyToRemove);
+    removePressedNote = action((noteToRemove: string) => {
+        this.pressedKeys = this.pressedKeys.filter((note) => note !== noteToRemove);
     });
 
-    getScale = action((index: number) => {
+    handleKeyDown = action((event: KeyboardEvent) => {
 
-        if (this.selectedIndex === -1) {
-            this.setScaleNotes([]);
+        if (event.repeat) {
             return;
         }
+        const key = event.key;
+        const note = KEY_TO_NOTE[key];
+        if (!this.pressedKeys.includes(note) && VALID_KEYS.includes(key)) {
+            this.addPressedNote(note);
+        }
+        this.playNote(note);
 
-        // major - W W H W W W H
-        // minor - W H W W H W W
-        // added one more note to scale to complete
-        var scaleIndices = this.isMajor ?
-            [index, index + 2, index + 4, index + 5, index + 7, index + 9, index + 11, index + 12, index + 14, index + 16, index + 17, index + 19]
-            : [index, index + 2, index + 3, index + 5, index + 7, index + 8, index + 10, index + 12, index + 14, index + 15, index + 17, index + 19];
+    });
+
+    handleKeyUp = action((event: KeyboardEvent) => {
+
+        const key = event.key;
+        const note = KEY_TO_NOTE[key];
+        const index = this.pressedKeys.indexOf(note);
+        if (index > -1) {
+            this.removePressedNote(note);
+        }
+
+    });
+
+    getPrimaryScaleIndices = (index: number): number[] => {
+
+        const steps = this.isMajor ? MAJOR_STEPS : MINOR_STEPS;
+        const scaleIndices = [index];
+        let currentStep = index;
+
+        steps.forEach((step) => {
+            currentStep += step;
+            scaleIndices.push(currentStep);
+        });
+
+        return scaleIndices;
+
+    };
+
+    getAllScaleIndices = (index: number, primaryScaleIndices: number[]): number[] => {
 
         const leftBound = 0;
         const rightBound = NOTES2.length - 1;
 
-        // want to keep sliding left until left < leftBound, keep sliding right until right > rightBound
-        // add to left and right and check those conditions before you ever index the array to avoid outOfBounds errors
-
-        // you know you're starting at index which is inbounds, and currently ending at index + 19 which is also inbounds
-        // ooo think you want to have that, then do little searches to left and right of index & index + 19 & make little subarrays for them
-        // then append all of the arrays together
-
+        // these arrays can be computed from the scaleIndices (left by reversing)
         var leftSteps: number[] = this.isMajor ? [1, 3, 5, 7, 8, 10, 12] : [2, 4, 5, 7, 9, 10, 12];
         var rightSteps: number[] = this.isMajor ? [2, 4, 5, 7, 9, 11, 12, 14, 16, 17, 19, 21] : [2, 3, 5, 7, 8, 10, 12, 14, 15, 17, 19, 20];
 
@@ -181,12 +204,24 @@ class AppStore {
 
         leftScaleIndices.reverse();
 
-        const allScaleIndices = leftScaleIndices.concat(scaleIndices.slice(0, 8), rightScaleIndices);
+        const allScaleIndices = leftScaleIndices.concat(primaryScaleIndices.slice(0, 8), rightScaleIndices);
+        return allScaleIndices;
 
-        // map over indices array, extract elements from notes array
-        var scaleNotes = scaleIndices.map(i => NOTES2[i]);
-        this.setScaleNotes(scaleNotes);
-        var allScaleNotes = allScaleIndices.map(i => NOTES2[i])
+    };
+
+    getScale = action((index: number) => {
+
+        if (this.selectedIndex === -1) {
+            this.setScaleNotes([]);
+            return;
+        }
+
+        const primaryScaleIndices = this.getPrimaryScaleIndices(index);
+        const primaryScaleNotes = primaryScaleIndices.map(i => NOTES2[i]);
+        this.setScaleNotes(primaryScaleNotes);
+
+        const allScaleIndices = this.getAllScaleIndices(index, primaryScaleIndices);
+        const allScaleNotes = allScaleIndices.map(i => NOTES2[i]);
         this.setAllScaleNotes(allScaleNotes);
 
     });
@@ -198,17 +233,19 @@ class AppStore {
             return;
         }
 
-        var chordNums = this.isMajor ? ['I1', 'ii', 'iii', 'IV', 'V', 'vi', 'vii°', 'I2'] : ['i1', 'ii°', 'III', 'iv', 'v', 'VI', 'VII', 'i2'];
-        var chords: StringArrayDictionary = {};
+        const chordNums = this.isMajor ? ['I1', 'ii', 'iii', 'IV', 'V', 'vi', 'vii°', 'I2']
+            : ['i1', 'ii°', 'III', 'iv', 'v', 'VI', 'VII', 'i2'];
+        let chords: StringArrayDictionary = {};
+
+        const scaleRootNote = NOTES2[this.selectedIndex];
+        const scaleRootNoteIndex = this.allScaleNotes.indexOf(scaleRootNote);
+        const chordRelevantNotes = this.allScaleNotes.slice(scaleRootNoteIndex);
 
         for (let i = 0; i < chordNums.length; i++) {
-            chords[chordNums[i]] = [this.scaleNotes[i], this.scaleNotes[i + 2], this.scaleNotes[i + 4]];
+            chords[chordNums[i]] = [chordRelevantNotes[i], chordRelevantNotes[i + 2], chordRelevantNotes[i + 4]];
         }
 
         this.setChordNotes(chords);
-
-        // console.log("Scale notes: ", scaleNotes);
-        // console.log("Chords: ", chords);
 
     });
 
@@ -247,12 +284,10 @@ class AppStore {
             const noteAudio = new Audio((document.getElementById(note) as HTMLAudioElement)?.src || '');
             noteAudio.play();
 
-            // add key to pressedKeys array for a second
-            this.setPressedKeys([...this.pressedKeys, note]);
+            this.addPressedNote(note);
 
             setTimeout(() => {
-                const noteRemoved = this.pressedKeys.filter((key) => key !== note);
-                this.setPressedKeys(noteRemoved);
+                this.removePressedNote(note);
             }, 300);
         }
     };
@@ -262,6 +297,34 @@ class AppStore {
         if (index === this.selectedIndex) this.setSelectedIndex(-1);
         else this.setSelectedIndex(index);
 
+    });
+
+    handleMajorButtonClick = action(() => {
+        if (!this.isMajor) {
+            this.setIsMajor(true);
+        }
+    });
+
+    handleMinorButtonClick = action(() => {
+        if (this.isMajor) {
+            this.setIsMajor(false);
+        }
+    });
+
+    handleChordsButtonClick = action(() => {
+        if (!this.isChord) {
+            this.setIsChord(true);
+        }
+    });
+
+    handleNotesButtonClick = action(() => {
+        if (this.isChord) {
+            this.setIsChord(false);
+        }
+    });
+
+    handleCloseModal = action(() => {
+        this.setShowConfigModal(false);
     });
 
 }

@@ -1,12 +1,14 @@
-const NOTES = ['C', 'Db', 'D', 'Eb', 'E', 'F', 'Gb', 'G', 'Ab', 'A', 'Bb', 'B'];
-const NOTES2 = ['C0', 'Db0', 'D0', 'Eb0', 'E0', 'F0', 'Gb0', 'G0', 'Ab0', 'A0', 'Bb0', 'B0', 'C1', 'Db1', 'D1', 'Eb1', 'E1', 'F1', 'Gb1', 'G1', 'Ab1', 'A1', 'Bb1', 'B1', 'C2', 'Db2', 'D2', 'Eb2', 'E2', 'F2', 'Gb2', 'G2', 'Ab2', 'A2'];
-// const NOTES2 = ['C0', 'Db0', 'D0', 'Eb0', 'E0', 'F0', 'Gb0', 'G0', 'Ab0', 'A0', 'Bb0', 'B0', 'C1', 'Db1', 'D1', 'Eb1', 'E1', 'F1', 'Gb1', 'G1', 'Ab1', 'A1', 'Bb1', 'B1', 'C2', 'Db2', 'D2', 'Eb2', 'E2'];
+export const NOTES = ['C', 'Db', 'D', 'Eb', 'E', 'F', 'Gb', 'G', 'Ab', 'A', 'Bb', 'B'];
+export const NOTES2 = ['C0', 'Db0', 'D0', 'Eb0', 'E0', 'F0', 'Gb0', 'G0', 'Ab0', 'A0', 'Bb0', 'B0', 'C1', 'Db1', 'D1', 'Eb1', 'E1', 'F1', 'Gb1', 'G1', 'Ab1', 'A1', 'Bb1', 'B1', 'C2', 'Db2', 'D2', 'Eb2', 'E2', 'F2', 'Gb2', 'G2', 'Ab2', 'A2'];
 
-type KeyToNoteMapping = {
+export const MAJOR_STEPS = [2, 2, 1, 2, 2, 2, 1];
+export const MINOR_STEPS = [2, 1, 2, 2, 1, 2, 2];
+
+export type KeyToNoteMapping = {
     [key: string]: string;
 };
 
-const KEY_TO_NOTE: KeyToNoteMapping = {
+export const KEY_TO_NOTE: KeyToNoteMapping = {
     w: 'C0',
     3: 'Db0',
     e: 'D0',
@@ -40,11 +42,11 @@ const KEY_TO_NOTE: KeyToNoteMapping = {
     ']': 'Gb2'
 };
 
-type NoteToKeyMapping = {
+export type NoteToKeyMapping = {
     [note: string]: string;
 };
 
-const NOTE_TO_KEY: NoteToKeyMapping = {
+export const NOTE_TO_KEY: NoteToKeyMapping = {
     "C0": 'w',
     "Db0": '3',
     "D0": 'e',
@@ -78,6 +80,4 @@ const NOTE_TO_KEY: NoteToKeyMapping = {
     "Gb2": ']'
 };
 
-const VALID_KEYS = ['w', '3', 'e', '4', 'r', 't', '6', 'y', '7', 'u', '8', 'i', 'z', 's', 'x', 'd', 'c', 'v', 'g', 'b', 'h', 'n', 'j', 'm', ',', 'l', '.', ';', '/', "'", ']'];
-
-export { NOTES, NOTES2, KEY_TO_NOTE, NOTE_TO_KEY, VALID_KEYS };
+export const VALID_KEYS = ['w', '3', 'e', '4', 'r', 't', '6', 'y', '7', 'u', '8', 'i', 'z', 's', 'x', 'd', 'c', 'v', 'g', 'b', 'h', 'n', 'j', 'm', ',', 'l', '.', ';', '/', "'", ']'];

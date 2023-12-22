@@ -1,9 +1,9 @@
 import { useContext } from 'react';
 import { AppStoreContext } from '../context/AppStoreContext';
 import { observer } from 'mobx-react-lite';
+import { NOTES } from './../global/constants';
 import { IconButton } from '@mui/material';
 import TuneIcon from '@mui/icons-material/Tune';
-import { NOTES } from './../global/constants';
 
 const Configuration = observer(() => {
 
@@ -17,7 +17,9 @@ const Configuration = observer(() => {
     return (
         <div className="flex items-center space-x-4">
             {(selectedIndex != -1) ?
-                <p style={{ color: "white", fontFamily: "Verdana", fontSize: "24px" }}>{NOTES[selectedIndex]} {isMajor ? "Major" : "Minor"} {isChord ? "chords" : "notes"}</p>
+                <p style={{ color: "white", fontFamily: "Verdana", fontSize: "24px" }}>
+                    {NOTES[selectedIndex]} {isMajor ? "Major" : "Minor"} {isChord ? "chords" : "notes"}
+                </p>
                 : <p style={{ color: "gray", fontFamily: "Verdana", fontSize: "24px" }}>Click configuration button to view a scale</p>
             }
             <IconButton size="large" onClick={handleOpenModal}>

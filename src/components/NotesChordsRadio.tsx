@@ -5,32 +5,22 @@ import { observer } from 'mobx-react-lite';
 const NotesChordsRadio = observer(() => {
 
     const store = useContext(AppStoreContext);
-    const { isChord, setIsChord } = store;
-
-    const handleChordsButton = () => {
-        if (!isChord) {
-            setIsChord(true);
-        }
-    };
-
-    const handleNotesButton = () => {
-        if (isChord) {
-            setIsChord(false);
-        }
-    };
+    const { isChord, handleChordsButtonClick, handleNotesButtonClick } = store;
 
     return (
 
         <div className="flex space-x-2">
             <button
-                className={`${isChord ? 'bg-white text-black' : 'bg-black text-white'} cursor-pointer font-semibold py-2 px-4 border border-gray-400 rounded shadow flex justify-center items-center`}
-                onClick={handleNotesButton}
+                className={`${isChord ? 'bg-white text-black' : 'bg-black text-white'} 
+                cursor-pointer font-semibold py-2 px-4 border border-gray-400 rounded shadow flex justify-center items-center`}
+                onClick={handleNotesButtonClick}
             >
                 Notes
             </button>
             <button
-                className={`${isChord ? 'bg-black text-white' : 'bg-white text-black'} cursor-pointer font-semibold py-2 px-4 border border-gray-400 rounded shadow flex justify-center items-center`}
-                onClick={handleChordsButton}
+                className={`${isChord ? 'bg-black text-white' : 'bg-white text-black'} 
+                cursor-pointer font-semibold py-2 px-4 border border-gray-400 rounded shadow flex justify-center items-center`}
+                onClick={handleChordsButtonClick}
             >
                 Chords
             </button>

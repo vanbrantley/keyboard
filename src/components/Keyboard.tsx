@@ -1,35 +1,13 @@
 import { useEffect, useContext } from "react";
-import { KEY_TO_NOTE, NOTES2, VALID_KEYS } from './../global/constants';
 import { AppStoreContext } from '../context/AppStoreContext';
 import { observer } from 'mobx-react-lite';
+import { NOTES2 } from './../global/constants';
 import Key from "./Key";
 
 const Keyboard = observer(() => {
 
     const store = useContext(AppStoreContext);
-    const { pressedKeys, setPressedKeys, playNote, selectedIndex } = store;
-
-    const handleKeyDown = (event: KeyboardEvent) => {
-        if (event.repeat) {
-            return;
-        }
-        const key = event.key;
-        const note = KEY_TO_NOTE[key];
-        if (!pressedKeys.includes(note) && VALID_KEYS.includes(key)) {
-            setPressedKeys([...pressedKeys, note]);
-        }
-        playNote(note);
-    };
-
-    const handleKeyUp = (event: KeyboardEvent) => {
-        const key = event.key;
-        const note = KEY_TO_NOTE[key];
-        const index = pressedKeys.indexOf(note);
-        if (index > -1) {
-            const updatedPressedKeys = [...pressedKeys.slice(0, index), ...pressedKeys.slice(index + 1)];
-            setPressedKeys(updatedPressedKeys);
-        }
-    };
+    const { handleKeyDown, handleKeyUp, pressedKeys, selectedIndex } = store;
 
     useEffect(() => {
         // Add event listeners when the component mounts
@@ -43,7 +21,16 @@ const Keyboard = observer(() => {
         };
     }, [pressedKeys]);
 
-    const shownNotes = (selectedIndex > 9) ? NOTES2.slice(5) : NOTES2.slice(0, -5);
+    // conditionally set range of keys on keyboard based on scale root note
+    const determiningNote = 'A0';
+    const determiningIndex = NOTES2.indexOf(determiningNote);
+
+    // show C0 - E0 keys
+    const lowerKeys = NOTES2.slice(0, -5);
+    // shift keyboard to start at F0 and include highest notes
+    const higherKeys = NOTES2.slice(5);
+
+    const shownNotes = (selectedIndex > determiningIndex) ? higherKeys : lowerKeys;
 
     const keys = shownNotes.map((note) => {
         return (
